@@ -1,0 +1,26 @@
+#include<stdio.h>
+int Fib(int n)
+{
+	int f=0,f1=1,f2=1;
+	if(n<=2)
+	return 1;
+	else 
+	for(int i=3;i<=n;i++)
+	{
+		f=f1+f2;
+		f1=f2;
+		f2=f;
+	}
+	return f;
+	
+}
+int main()
+{
+	int ret=0,n;
+	printf("请输入一个数字\n");
+	scanf("%d",&n);
+	//TDD--测试驱动开发(想思考这个自定义怎么用) 
+	ret=Fib(n);
+	printf("ret=%d\n",ret);
+	return 0;
+}
