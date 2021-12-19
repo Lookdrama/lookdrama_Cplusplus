@@ -1,0 +1,14 @@
+#include<stdio.h>
+void decompose(float num,int *int_part,float *float_part)
+{
+	*int_part=(int)num;
+	*float_part=num-*int_part;
+}
+int main()
+{
+	int int_part;
+	float num=3.1415,float_part;
+	decompose(num,&int_part,&float_part);
+	printf("%d ,%g",int_part,float_part);
+return 0;
+} 
