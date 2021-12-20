@@ -1,0 +1,19 @@
+#include<stdio.h>
+void  decompose(int num)
+{
+	if(num>=1&&num<=9)
+	printf("%d ",num);
+	else
+	{
+		decompose(num/10);
+		printf("%d ",num%10);
+	}
+}
+int main()
+{
+	int num;
+	printf("请输入1~32767之间的整数\n");
+	scanf("%d",&num);
+	decompose(num);
+	return 0;
+}
