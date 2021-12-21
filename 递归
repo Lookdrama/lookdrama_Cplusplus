@@ -1,0 +1,14 @@
+#include<stdio.h>
+int age(int n)
+{
+	if(n==1)
+	return 10;
+	else 
+	return age(n-1)+2;
+}
+int main()
+{
+	int n=5;
+	printf("第五个人年龄为%d",age(n));
+	return 0;
+}
