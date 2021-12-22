@@ -1,0 +1,25 @@
+#include<stdio.h>
+int main()
+{
+	int i,one,ten,hund,count=0;
+	printf("100~1000水仙花数为");
+	for(i=100;i<=999;i++)
+	{
+		for(hund=1;hund<=9;hund++)
+		{
+			for(ten=0;ten<=9;ten++)
+			{
+				for(one=0;one<=9;one++)
+				{
+					if(i==one*one*one+ten*ten*ten+hund*hund*hund&&i==hund*100+ten*10+one)	
+					{
+						printf("%d ",i);	
+						count++;
+					}		
+				}
+			}
+		}
+	}
+	printf("\ncount=%d",count);
+	return 0;
+}
