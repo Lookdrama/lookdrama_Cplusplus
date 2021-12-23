@@ -1,0 +1,42 @@
+#include "stdio.h"
+#include "math.h"
+int main()
+{
+	//这里变量的命名很DT，将就着看看吧
+	int yi_jiao;		//1角钱的个数
+	int wu_jiao;		//5角钱的个数
+	int yi_yuan;		//1元钱的个数
+ 
+	int shi_yuan = 8;		//10元钱的个数
+	scanf("%d", &shi_yuan);
+	getchar();
+ 
+	int flag = 0;		//标记变量，表示有木有整数解
+	int total;	//三种硬币的总值
+	
+	for (yi_jiao = 1; yi_jiao <= shi_yuan*100; yi_jiao++)
+	{
+		for (wu_jiao = 1; wu_jiao <= shi_yuan*50; wu_jiao++)
+		{
+			for (yi_yuan = 1; yi_yuan <= shi_yuan*10; yi_yuan++)
+			{
+				if ( (fabs(yi_jiao*1.8 - wu_jiao*1.5) < 0.000001) && (fabs(wu_jiao*1.5 - yi_yuan * 2.0) < 0.000001))
+				{       //判断浮点数相等时，不能直接用==，而是求差。
+					total = yi_jiao / 10 + wu_jiao / 2 + yi_yuan;
+				
+					if (total == shi_yuan * 10)
+					{
+						flag = 1;
+						printf("%d,%d,%d\n", yi_jiao, wu_jiao, yi_yuan);
+					}
+				}
+			}
+		}
+	}
+	if (flag == 0)
+	{
+		printf("No change.\n");
+	}
+	
+	return 0;
+}
