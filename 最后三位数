@@ -1,0 +1,17 @@
+#include<stdio.h>
+int main()
+{
+	int a,b;
+	long int sum=1;
+	scanf("%d%d",&a,&b);
+	for(int i=1;i<=b;i++)
+	{
+		sum=(sum*a)%1000;
+	}
+	if(sum<10)
+	printf("00%ld",sum);
+	else if(sum<100)
+	printf("0%ld",sum);
+	else printf("%ld",sum);
+	return 0;
+}
