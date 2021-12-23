@@ -1,0 +1,29 @@
+#include<stdio.h>
+void Max(int max,char a[0])
+{
+	int j=0,n,t;
+	for(j=0;j<5;j++)
+	{
+		if(max<a[j])
+		{
+			t=max;
+			max=a[j];
+			a[j]=max;
+			n=j;
+		}
+	}
+	a[n]=0;
+	printf("%d",max-48);
+}
+int main()
+{
+	char a[5]={0},i,max;
+	scanf("%s",a);
+	max=a[0]-48;
+	Max(max,a);
+	Max(max,a);
+	Max(max,a);
+	Max(max,a);
+	Max(max,a);
+	return 0;
+}
