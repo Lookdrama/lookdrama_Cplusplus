@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<string.h>
+void reverse(int sz,char a[])
+{
+	int L=0,t,R=sz-1;
+	while(L<R)
+	{
+		t=a[L];
+		a[L]=a[R];
+		a[R]=t;
+		L++;
+		R--;
+	}
+}
+int main()
+{
+	char a[10];
+	gets(a);
+	int sz=strlen(a);
+	reverse(sz,a);
+	puts(a);
+	return 0;
+} 
