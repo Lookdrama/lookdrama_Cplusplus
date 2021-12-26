@@ -1,0 +1,23 @@
+#include<stdio.h>
+#include<string.h>
+#define N 100
+int main()
+{
+	char a[N];
+	int i,j,k;
+	scanf("%s",a);
+	for(i=0;i<strlen(a);i++)
+	{
+		for(j=i+1;j<strlen(a);j++)
+		{
+			if(a[i]==a[j])
+			{
+				for(k=j;k<strlen(a);k++)
+				a[k]=a[k+1];
+				j--;
+			}
+		}
+	}
+	printf("%s\n",a);
+	return 0;
+}
