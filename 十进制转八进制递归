@@ -1,0 +1,17 @@
+#include<stdio.h>
+int transform(int n)
+{
+	if(n<8)
+	return n;
+	else 
+	return n%8+10*transform(n/8);	
+}
+int main()
+{
+	int n;
+	printf("请输入一个数字\n");
+	scanf("%d",&n);
+	printf("十进制为%d\n",n);
+	printf("八进制为%d",transform(n));
+	return 0;
+}
