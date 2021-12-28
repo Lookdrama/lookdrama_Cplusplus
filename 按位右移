@@ -1,0 +1,7 @@
+#include<stdio.h>
+int main(){
+	int a=10;
+	a=a>>1;//按位右移一位，十进制除以二 
+	printf("a=%d",a);
+	return 0;
+} 
