@@ -1,0 +1,32 @@
+#include<stdio.h>
+int main( )
+{ 
+	int i,j,k,A[50][50],B[50][50],row1,col1,row2,col2,C[50][50];   
+	printf("输入第一个矩阵的行数和列数：\n"); 
+    scanf("%d,%d",&row1,&col1);
+ 	printf("输入第一个矩阵：\n");
+  	for(i=0;i<row1;i++)
+    for(j=0;j<col1;j++)
+    	scanf("%d",&A[i][j]); 
+	printf("输入第二个矩阵的行数和列数：\n");
+    scanf("%d,%d",&row2,&col2);
+	printf("输入第二个矩阵：\n");
+  	for(i=0;i<row2;i++)
+    for(j=0;j<col2;j++)
+      	scanf("%d",&B[i][j]); 
+  	if(col1!=row2)
+    	printf("矩阵无法实现相乘");
+ 	C[0][0]=0;
+ 	printf("矩阵相乘的结果是:\n"); 
+     for(i=0;i<row1;i++)
+         for(j=0;j<col2;j++)
+             for(k=0;k<col1;k++)
+                 C[i][j]+=A[i][k]*B[k][j]; 
+ 	for(i=0;i<row1;i++)
+   	{
+   		for(j=0;j<col2;j++)
+      		printf("%d ",C[i][j]); 
+    	printf("\n"); 
+   	} 
+   	return 0;
+} 
