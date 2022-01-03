@@ -1,0 +1,24 @@
+#include<string.h>
+#include<stdio.h>
+int main()
+{
+	char str[20];
+	scanf("%s",str);
+	int i;
+	int sz=strlen(str);
+	for(i=0;str[i]!='\0';i++)
+	{
+		if(str[i]==str[sz-1-i])
+		continue;
+		else
+		{
+			printf("不是回文\n");
+			break;
+		}
+	}
+	if(i>=sz)
+	{
+		printf("是回文\n");
+	}	
+	return 0;
+}
