@@ -1,0 +1,193 @@
+//#include<stdio.h>
+//#include<stdlib.h>
+//
+//typedef struct TreeNode{
+//	char data;
+//	struct TreeNode* lchild;
+//	struct TreeNode* rchild;
+//}TreeNode,*BiTree;
+//
+//typedef struct QueueNode{
+//	TreeNode* data;
+//	struct QueueNode* pre;
+//	struct QueueNode* next;
+//}QueueNode;
+//
+//void createTree(BiTree *T)	//先输入根->左子树->右子树 
+//{
+//	char data;
+//	scanf("%c",&data);
+//	if(data=='#')	//此时为空节点 
+//	{
+//		*T=NULL;
+//	}	
+//	else	//此时不为空 
+//	{
+//		(*T)=(TreeNode*)malloc(sizeof(TreeNode));
+//		(*T)->data=data;
+//		//创建左子树与创建树的逻辑一致，进行递归 
+//		createTree(&(*T)->lchild);
+//		//创建右子树与创建树的逻辑一致，进行递归
+//		createTree(&(*T)->rchild);		
+//	}
+//}
+//
+//QueueNode* initQueue()
+//{
+//	QueueNode* Q=(QueueNode*)malloc(sizeof(QueueNode));
+//	Q->data=NULL;
+//	Q->pre=Q;
+//	Q->next=Q;
+//	return Q;
+//}
+//
+//void enQueue(TreeNode* data,QueueNode* Q)
+//{
+//	QueueNode* node=(QueueNode*)malloc(sizeof(QueueNode));
+//	node->data=data;
+//	node->pre=Q;
+//	node->next=Q;
+//	Q->pre->next=node;
+//	Q->pre=node;
+//}
+//
+//int isEmpty(QueueNode *Q)
+//{
+//	if(Q->next==Q)
+//	{
+//		return 1;
+//	}
+//	else 
+//	{
+//		return 0;
+//	}	
+//}
+//
+//QueueNode* deQueue(QueueNode* Q)
+//{
+//	if(isEmpty(Q))
+//	{
+//		return NULL;
+//	}
+//	else
+//	{
+//		QueueNode* node=Q->next;
+//		Q->next->next->pre=Q;
+//		Q->next=Q->next->next;
+//		return node;	
+//	}
+//}
+////层次遍历二叉树
+//void levelTraverse(QueueNode*Q,TreeNode* T)
+//{
+// 	enQueue(T,Q);
+// 	while(!isEmpty(Q))
+//	{
+//		QueueNode* node=deQueue(Q);
+//		printf("%c ",node->data->data);
+//		if(node->data->lchild)
+//		{
+//			enQueue(node->data->lchild,Q);
+//		}
+//		if(node->data->lchild)
+//		{
+//			enQueue(node->data->rchild,Q);
+//		}
+//	}
+//}
+// 
+//int main()
+//{
+//	BiTree T;
+//	createTree(&T);
+//	QueueNode* Q=initQueue();
+//	levelTraverse(Q,T);
+//	return 0;
+//}
+#include <stdio.h>
+#include <stdlib.h>
+#define TElemType int
+#define NODENUM 10000
+
+//初始化队头和队尾指针开始时都为0
+int front = 0, rear = 0;
+typedef struct BiTNode {
+    TElemType data;//数据域
+    struct BiTNode* lchild;
+	struct BiTNode* rchild;//左右孩子指针
+}BiTNode, * BiTree,* Queue;
+
+//以先序遍历的方式创建一颗二叉树
+void CreateBiTree(BiTree* T) {
+    int num;
+    scanf("%d", &num);
+    //如果输入的值为 0，表示无此结点
+    if (num == 0) {
+        *T = NULL;
+    }
+    else
+    {
+        //创建新结点
+        *T = (BiTree)malloc(sizeof(BiTNode));
+        (*T)->data = num;
+        CreateBiTree(&((*T)->lchild));//创建该结点的左孩子
+        CreateBiTree(&((*T)->rchild));//创建该结点的右孩子
+    }
+}
+
+//入队函数
+void EnQueue(Queue* a, BiTree node) {
+    if (rear == NODENUM) {
+        printf("队列已满，入队失败\n");
+        exit(0);
+    }
+    a[rear] = node;	//将树的结点存储在队列中
+    rear++;
+}
+
+//出队函数
+Queue DeQueue(Queue* a) {
+    if (front == rear) {
+        printf("队列为空，出队失败\n");
+        exit(0);
+    }
+    return a[front++];	//返回队列中的结点
+}
+
+//层次遍历二叉树
+void LevelOrderTraverse(BiTree T) 
+{
+    //如果二叉树存在，才进行层次遍历
+    if (T) 
+	{
+        Queue a[20] = { 0 };
+        Queue p = NULL;
+        p = T;	
+        EnQueue(a, p);		//根结点入队
+        //重复执行，直至队列为空
+        while (front < rear)
+        {
+            //从队列取出一个结点
+            p = DeQueue(a);
+            //访问当前结点
+            printf("%d ", p->data);
+            //将当前结点的左右孩子依次入队
+            if (p->lchild) 
+			{
+                EnQueue(a, p->lchild);
+            }
+            if (p->rchild) 
+			{
+                EnQueue(a, p->rchild);
+            }
+        }
+    } 
+}
+
+int main() 
+{
+    BiTree Tree;
+    CreateBiTree(&Tree);
+    LevelOrderTraverse(Tree);
+    return 0;
+}
