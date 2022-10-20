@@ -1,0 +1,85 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Graph{
+	char* vexs;		//顶点
+	int** arcs;		//边(使用**目的表示矩阵)
+	int vexNum;
+	int arcsNum;
+}Graph;
+
+//初始化一个图
+Graph* initGraph(int vexNum)
+{
+	Graph* G=(Graph*)malloc(sizeof(Graph));
+	G->vexs=(char*)malloc(sizeof(char) *vexNum);
+	G->arcs=(int**)malloc(sizeof(int*) *vexNum);
+	for(int i=0;i<vexNum;i++)
+	{
+		G->arcs[i]=(int*)malloc(sizeof(int) *vexNum);
+	}
+	G->vexNum=vexNum;
+	G->arcsNum=0;
+	return G;
+}
+
+//构建一个图
+void createGraph(Graph* G,char* vexs,int* arcs)
+{
+	for(int i=0;i<G->vexNum;i++)
+	{
+		G->vexs[i]=vexs[i];
+		for(int j=0;j<G->vexNum;j++)
+		{
+			G->arcs[i][j]=*(arcs+i/*行*/*G->vexNum+j);
+			if(G->arcs[i][j]!=0)
+			{
+				G->arcsNum++;
+			}
+		}
+	}
+	G->arcsNum=G->arcsNum/2;
+}
+
+/*图的遍历：
+BFS:广度优先遍历(等同于树的层次遍历)
+DFS:深度优先遍历(一条路走到黑,不到南墙不回头,撞墙之后再回头，回头之后在撞墙)
+{
+	1.找一个节点访问
+	2.找这个节点可以到达的节点去访问
+	3.重复第一步，直到所有节点访问完毕
+}
+*/	
+
+void DFS(Graph* G,int* visited,int index)	//visited数组用来存放是否遍历
+{
+	printf("%c\t",G->vexs[index]);
+	visited[index]=1;
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(G->arcs[index][i]==1&&!visited[i])
+		{
+			DFS(G,visited,i);
+		}
+	}
+}
+int main()
+{
+	Graph* G=initGraph(5);
+	int* visited=(int*)malloc(sizeof(int)*G->vexNum);
+	for(int i=0;i<=G->vexNum;i++)
+	{
+		visited[i]=0;
+	}
+	int arcs[5][5]={	//邻接矩阵
+		0,1,1,1,0,
+		1,0,1,1,1,
+		1,1,0,0,0,
+		1,1,0,0,1,
+		0,1,0,1,0
+		};
+	createGraph(G,"ABCDE",(int*)arcs);
+	DFS(G,visited,0);
+	printf("\n");
+	return 0;
+}
