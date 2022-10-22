@@ -1,0 +1,196 @@
+#include <stdio.h>
+#include <stdlib.h>
+ 
+typedef int ElemType;	//便于后期的修改 
+ 
+//定义结点类型 
+typedef struct Node {
+    ElemType data;              //单链表中的数据域 
+    struct Node *next;          //单链表的指针域 
+}Node,*LinkedList;
+ 
+ 
+ //建立菜单 
+ void menu()
+ {
+  printf("*****1.单链表的插入*****\n");
+  printf("*****2.单链表的删除*****\n");
+  printf("*****3.单链表的查找*****\n");
+  printf("*****0.     退出   *****\n");
+ }
+ 
+//单链表的初始化
+ 
+LinkedList LinkListInit() {
+    Node *L;
+    L = (Node *)malloc(sizeof(Node));   //申请结点空间 
+    if(L == NULL) 	//判断是否有足够的内存空间
+	{  
+        printf("申请内存空间失败\n");
+    }
+    L->next = NULL;                  //将next设置为NULL,初始长度为0的单链表 
+ 	return L;
+}
+ 
+ 
+	//单链表的建立（头插法）
+	 
+	 
+	LinkedList ListCreatH() {
+	    Node *L;
+	    L = (Node *)malloc(sizeof(Node));   //申请头结点空间
+	    L->next = NULL;                      //初始化一个空链表
+	    int i=0;
+	    ElemType x;                         //x为链表数据域中的数据
+	    while(i<10) {
+	        Node *p;
+	        p = (Node *)malloc(sizeof(Node));   //申请新的结点 
+	        scanf("%d",&x);
+	        p->data = x;                     //结点数据域赋值 
+	        p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+	        L->next = p; 
+	        i++;
+	    }
+	    return L; 
+	} 
+	 
+	 
+	//单链表的建立（尾插法）
+	 
+	LinkedList ListCreatT() {
+	    Node *L;
+		    L = (Node *)malloc(sizeof(Node));   //申请头结点空间
+		    L->next = NULL;                  //初始化一个空链表
+		    Node *r;
+		    r = L;                          //r始终指向终端结点，开始时指向头结点 
+			int i=0   ;                   //x为链表数据域中的数据
+		    for(i=0;i<10;i++)
+			{ 		
+				Node *p;
+		        p = (Node *)malloc(sizeof(Node));   //申请新的结点 
+		        scanf("%d",&p->data);
+		        r->next = p;                 //将结点插入到表头L-->|1|-->|2|-->NULL 
+		        r = p; 						//将r结点移动到最后一个节点
+		    }
+		    r->next = NULL;  				//让r结点的指针域置空 
+		    return L; 
+	}
+ 
+ 
+//单链表的插入，在链表的第i个位置插入x的元素
+/*初始条件：单链表L已存在，1<=i<=ListLength(L)*/
+/*在L中第i个位置之前插入新的数据元素e，L的长度加1*/
+LinkedList ListInsert(LinkedList L,int i,ElemType x) {
+    LinkedList pre;                      //pre为前驱结点 
+    pre = L;
+    int tempi = 0;
+    for (tempi = 1; tempi < i; tempi++) {
+    	pre = pre->next;                 //查找第i个位置的前驱结点 
+	}
+    Node *p;                                //插入的结点为p
+    p = (Node *)malloc(sizeof(Node));
+    p->data = x; 
+    p->next = pre->next;
+    pre->next = p;
+    return L;                           
+} 
+ 
+ 
+//单链表的删除，在链表中删除第i个数据元素
+/*初始条件：单链表L已存在，1<=i<=ListLength(L)*/
+/*操作结果：删除L的第i个数据元素，L的长度减1*/ 
+LinkedList ListDelete(LinkedList L,int i)
+{
+    LinkedList p,q;                   
+	int j=2; 
+    p = L->next;
+    while(p->next&&j<i) {              //查找第i个位置 
+        p=p->next;
+		++j;
+    }
+    if(!(p->next)||j>i)			//第i个元素不存在
+		printf("第i个元素不存在\n");
+    q=p->next;				
+	p->next=q->next;			//将q的后继赋值给p的后继 
+    free(q);
+    return L;
+} 
+ 
+//单链表的查找
+/*初始条件：单链表L已存在，1<=i<=ListLength(L)*/
+/*操作结果：用e打印中第i个数据元素的值*/ 
+ void GetElem(LinkedList L)
+ {
+ 	int i,j=1;		//j为计数器 
+ 	int *e;
+ 	LinkedList p;		//声明一结点p 
+ 	printf("请输入查找的位置:");
+ 	scanf("%d",&i);
+ 	p=L->next;		//让p指向链表L的第一个结点 
+ 	while(p&&j<i)
+ 	{
+ 		p=p->next;		//让p指向下一个结点 
+ 		++j;	
+ 	}
+ 	if(!p||j>i)
+ 		printf("第i个元素不存在");		//第i个元素不存在 
+ 	*e=p->data;				//取第i个元素的数据 
+ 	printf("%d\n",*e);
+ }
+ 
+ 
+int main() {
+    LinkedList list,start;
+ 	printf("请输入单链表的数据：\n"); 
+    list = ListCreatT();
+    printf("成功创建链表：\n");
+    for(start = list->next; start != NULL; start = start->next) {
+    	printf("%d ",start->data);
+	}
+    printf("\n");
+    menu();
+    int i,option;
+    ElemType x;
+    do{
+		printf("请输入选项：");
+		scanf("%d",&option);
+		switch(option)
+		{
+		   	case 1:
+			{
+			   	printf("请输入插入数据的位置：");
+				scanf("%d",&i);
+				printf("请输入插入数据的值：");
+				scanf("%d",&x);
+				ListInsert(list,i,x);
+				printf("插入后的链表为：");
+				//打印链表 
+				for(start = list->next; start != NULL; start = start->next)
+				{
+					printf("%d ",start->data);
+				}
+				printf("\n");
+					  break;
+				}
+			case 2:
+			{
+				int i; 
+				printf("请输入删除的位置\n");
+				scanf("%d",&i);
+				ListDelete(list,i);
+				printf("删除后的链表为：");
+				//打印链表
+				for(start = list->next; start != NULL; start = start->next)
+				{
+					printf("%d ",start->data);					
+				}
+				printf("\n");
+				break;		
+			}
+			case 3:GetElem(list);			break;		
+			case 0:break;	
+			default:printf("输出错误！\n");break;
+	   } 		
+	}while(option>0);
+    return 0;
+}
