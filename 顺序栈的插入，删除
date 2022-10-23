@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include <stdlib.h>
+#define MAXSIZE 100
+
+
+/*顺序栈结构*/
+typedef struct SqStack
+{
+	int data[MAXSIZE];
+	int top;	/*用于栈顶指针*/
+}SqStack; 
+
+
+//初始化一个顺序栈
+void Init_Stack(SqStack *S)
+{
+	S = (SqStack*)malloc(sizeof(SqStack));
+	S->top = -1;
+}
+
+
+/*插入元素e为新的栈顶元素*/
+void Push(SqStack *S,int e)
+{
+	if(S->top==MAXSIZE-1) //栈满
+	{
+		printf("栈已满，无法进行进栈操作\n");
+	} 
+	S->top++;		//栈顶指针增加一 
+	S->data[S->top]=e;		//将新插入的元素赋值给栈顶元素 
+}
+
+/*若栈不空，则删除S的栈顶元素，并用e来表示删除的元素的值*/
+void pop(SqStack *S)
+{
+	if(S->top==-1)
+	{
+		printf("栈为空，无法进行出栈操作\n");
+	}
+	S->top--;
+}
+
+/*打印栈*/
+void printStack(SqStack *S)
+{
+	if(S->top==-1)
+	{
+		printf("栈为空，无法打印\n");
+	}
+	else
+	{
+		printf("该栈的内容为：");
+		for(int i=1;i<=S->top;i++)
+		{
+			printf("%d ",S->data[i]);
+		}	
+	}
+	printf("\n");
+}
+
+//顺序栈的创建
+void createStack(SqStack *S)
+{
+	int num1;
+	int e;	
+	printf("请输入所需要进栈的个数\n"); 
+	scanf("%d",&num1);
+	printf("请输入栈中元素\n");
+	while(num1!=0)
+	{
+		scanf("%d",&e);
+		S->top++;
+		S->data[S->top]=e;
+		num1--;
+	}
+} 
+ 
+int main()
+{
+	SqStack S[MAXSIZE];
+	Init_Stack(S);
+	printf("顺序栈创建成功\n");
+	createStack(S);	
+	printStack(S);
+	Push(S,3);
+	printStack(S);
+	pop(S);
+	printStack(S);
+	return 0;
+}
