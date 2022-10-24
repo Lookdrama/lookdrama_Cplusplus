@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Queue 
+{
+	int data;
+	struct Queue  *next;
+	
+}Queue ;
+
+Queue * InitQueue()
+{
+	Queue  *Q=(Queue *)malloc(sizeof(Queue ));
+	Q->data=0;
+	Q->next=NULL;
+	return Q;
+}
+
+void enQueue(Queue  *Q,int data)
+{
+	Queue  *q=Q;	//创建一个结点，并指向Q的头结点
+	Queue  *node=(Queue  *)malloc(sizeof(Queue ));	//创建一个新的结点
+	node->data=data;
+	for(int i=0;i<Q->data;i++)
+	{
+		q=q->next;	//遍历队列，到尾结点
+	}
+	node->next=q->next;
+	q->next=node;
+	Q->data++;
+}
+
+int isEmpty(Queue  *Q)
+{
+	if(Q->data==0||Q->next==NULL)
+	{
+		return 0;
+	}
+	else 
+	{
+		return 1;
+	}
+	
+}
+
+int deQueue(Queue  *Q)
+{
+	if(isEmpty(Q))
+	{
+		Queue  *p=Q->next;
+		int data=p->data;
+		Q->next=p->next;
+		free(p);
+		return data;
+	}
+	else
+	{
+		printf("队列为空\n");
+		return -1;	
+	}
+}
+
+void printQueue(Queue  *Q)
+{
+	Queue  *p=Q->next;
+	for(int i=0;p;i++)
+	{
+		printf("%d->",p->data);
+		p=p->next;
+	}
+	printf("NULL");
+}
+
+int main()
+{
+	Queue  *Q=InitQueue();
+	enQueue(Q,1);
+	enQueue(Q,2);
+	enQueue(Q,4);
+	enQueue(Q,6);
+	printQueue(Q);
+	int num=deQueue(Q);
+	printf("\n删除元素为：%d\n",num);
+	printQueue(Q);
+	return 0;
+}
