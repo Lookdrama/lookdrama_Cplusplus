@@ -1,0 +1,104 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct String{
+	char *data;		//字符串 
+	int len;		//存放字符串长度 
+}String;
+
+/*初始化字符串*/
+String *initString()
+{
+	String* s=(String *)malloc(sizeof(String));
+	s->data=NULL;
+	s->len=0;
+	return s;
+} 
+
+/*建立字符串*/
+void stringAssign(String* s,char* data)
+{
+	char *temp=data;		//创建一个中间变量来存放字符串;
+	int len=0;
+	if(s->data)		//防止野指针的出现 
+	{
+		free(s->data);
+	} 
+	while(*temp)
+	{
+		len++;
+		temp++;
+	} 
+	if(len==0)
+	{
+		s->data=NULL;
+		s->len=0;
+	} 
+	else
+	{
+		temp=data;		//将temp重新指向头指针 
+		s->len=len;		//计算字符串长度 
+		s->data=(char*)malloc(sizeof(char)*(len+1)); 	//加1是为了存放/n; 
+		for(int i=0;i<len;i++)
+		{
+			s->data[i]=*temp;
+			temp++;
+		}	
+	}
+}
+/*解释一下为啥前面用了指针，而上面用了数组：
+数组a[i]在编译的时候会被编译器复原成*(a+i)，其中a是数组名，也是数组的首地址，
+也就是说a[i]和*(a+i)是完全等价的，甚至可以认为C语言没有数组，
+a[i]只是方便表达，实际上程序是按照*(a+i)操作的。
+因此,数组在一段连续的内存中存储的，这也是可以用数组来描述数据结构中的顺序存储结构的原因。
+*/
+ 
+
+//打印字符串 
+void printString(String* s)
+{
+	for(int i=0;i<s->len;i++)
+	{
+		printf(i==0?"%c":"-> %c ",s->data[i]);	
+	}
+	printf("\n");
+}
+
+//暴力匹配 
+void forceMatch(String* master,String* sub)
+{
+	int i=0;
+	int j=0;
+	while(i<master->len&&j<sub->len)
+	{
+		if(master->data[i]==sub->data[j])
+		{
+			i++;
+			j++;
+		}
+		else
+		{
+			i=i-j+1;
+			j=0;	
+		}
+	}
+	if(j==sub->len)
+	{
+		printf("force match success.\n");
+	}
+	else
+	{
+		printf("force match fail.\n");	
+	}
+}
+int main()
+{
+	String* s=initString();
+	String* s1=initString();
+	stringAssign(s,"Hello");
+	stringAssign(s1,"He");
+	printString(s);
+	printString(s1);
+	forceMatch(s,s1);
+	return 0;
+}
