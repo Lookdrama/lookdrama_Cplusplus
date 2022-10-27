@@ -1,0 +1,181 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+/*
+	此算法是基于MST性质(找边法)下:
+	假设(V,E)是一个连通图，U是顶点集V的一个非空子集，如果(u,v)
+	是一条具有最小权值的边，u属于U，v属于V-U，(u,v)必是最小生成树的边
+*/
+
+/*图顶点之间不通，那么邻接矩阵的值为MAX
+  如果顶点是自己本身，那么值为0*/
+#define MAX 32767
+ 
+typedef struct Graph{
+	char* vexs;		//顶点
+	int** arcs;		//权重(使用**目的表示矩阵)
+	int vexNum;
+	int arcsNum;
+}Graph;
+
+//初始化一个图
+Graph* initGraph(int vexNum)
+{
+	Graph* G=(Graph*)malloc(sizeof(Graph));
+	G->vexs=(char*)malloc(sizeof(char) *vexNum);
+	G->arcs=(int**)malloc(sizeof(int*) *vexNum);
+	for(int i=0;i<vexNum;i++)
+	{
+		G->arcs[i]=(int*)malloc(sizeof(int) *vexNum);
+	}
+	G->vexNum=vexNum;
+	G->arcsNum=0;
+	return G;
+}
+
+//构建一个图
+void createGraph(Graph* G,char* vexs,int* arcs)
+{
+	for(int i=0;i<G->vexNum;i++)
+	{
+		G->vexs[i]=vexs[i];
+		for(int j=0;j<G->vexNum;j++)
+		{
+			G->arcs[i][j]=*(arcs+i*G->vexNum+j);
+			if(G->arcs[i][j]!=0&&G->arcs[i][j]!=MAX)
+			{
+				G->arcsNum++;
+			}
+		}
+	}
+	G->arcsNum=G->arcsNum/2;
+}
+
+/*图的遍历：
+BFS:广度优先遍历(等同于树的层次遍历)
+DFS:深度优先遍历(一条路走到黑,不到南墙不回头,撞墙之后再回头，回头之后在撞墙)
+{
+	1.找一个节点访问
+	2.找这个节点可以到达的节点去访问
+	3.重复第一步，直到所有节点访问完毕
+}
+*/	
+
+void DFS(Graph* G,int* visited,int index)	//visited数组用来存放是否遍历
+{
+	printf("%c\t",G->vexs[index]);
+	visited[index]=1;
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(G->arcs[index][i]>0 && G->arcs[index][i]!=MAX && !visited[i])
+		{
+			DFS(G,visited,i);
+		}
+	}
+}
+
+/*
+kruskal找边法:
+	1.对边排序
+	2.选边
+	3.点与点的连线
+核心问题:
+1.建立一个边的数组并排序
+2.判断图是否连通?
+	需要一个辅助数组，来去记录当前索引的节点所属于哪个连通分量
+*/
+
+typedef struct Edge{
+	int start;	//起点索引
+	int end;	//终点索引
+	int weight;		//权值
+}Edge;
+
+Edge* initEdge(Graph* G)
+{
+	int index=0;
+	Edge* edge=(Edge*)malloc(sizeof(Edge)*G->arcsNum);
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=i+1;j<G->vexNum;j++)
+		{
+			if(G->arcs[i][j]!=MAX)
+			{
+				edge[index].start=i;
+				edge[index].end=j;
+				edge[index].weight=G->arcs[i][j];
+				index++;
+			}
+		}
+	}
+	return edge;
+}
+
+//排序权值函数(冒泡排序)
+void sortEdge(Edge* edge,Graph* G)
+{
+	Edge temp;
+	for(int i=0;i<G->arcsNum-1;i++)
+	{
+		for(int j=0;j<G->arcsNum-i-1;j++)
+		{
+			if(edge[j].weight>edge[j+1].weight)
+			{
+				temp=edge[j];
+				edge[j]=edge[j+1];
+				edge[j+1]=temp;
+			}
+		}
+	}
+}
+
+void kruskal(Graph* G)
+{
+	//建立一个辅助数组
+	int* connected=(int*)malloc(sizeof(int)*G->vexNum); 
+	for(int i=0;i<G->vexNum;i++)
+	{
+		connected[i]=i;
+	}
+	Edge* edge=initEdge(G);
+	sortEdge(edge,G);
+	for(int i=0;i<G->arcsNum;i++)	//进行选边
+	{
+		int start=connected[edge[i].start];
+		int end=connected[edge[i].end];
+		if(start!=end)	//判断是否围成一个圈
+		{
+			printf("v%c --> v%c = %d\n",G->vexs[edge[i].start],G->vexs[edge[i].end],edge[i].weight);
+			for(int j=0;j<G->vexNum;j++)
+			{
+				if(connected[j]==end)	
+				{
+					connected[j]=start;	//将每个节点的辅助值变成起点
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	Graph* G=initGraph(6);
+	int* visited=(int*)malloc(sizeof(int)*G->vexNum);
+	for(int i=0;i<=G->vexNum;i++)
+	{
+		visited[i]=0;
+	}
+	int arcs[6][6]={	//邻接矩阵(权重)
+		0,6,1,5,MAX,MAX,
+		6,0,5,MAX,3,MAX,
+		1,5,0,5,6,4,
+		5,MAX,5,0,MAX,2,
+		MAX,3,6,MAX,0,6,
+		MAX,MAX,4,2,6,0
+		};
+	createGraph(G,"123456",(int*)arcs);
+	DFS(G,visited,0);
+	printf("\n");
+	kruskal(G);
+	return 0;
+}
