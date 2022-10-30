@@ -1,0 +1,252 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<windows.h>
+
+/*图顶点之间不通，那么邻接矩阵的值为MAX
+  如果顶点是自己本身，那么值为0*/
+#define MAX 32767
+
+int system(const char *command);
+ 
+typedef struct Graph{
+	char* vexs;		//顶点
+	int** arcs;		//权重(使用**目的表示矩阵)
+	int vexNum;
+	int arcsNum;
+}Graph;
+
+//初始化一个图
+Graph* initGraph(int vexNum)
+{
+	Graph* G=(Graph*)malloc(sizeof(Graph));
+	G->vexs=(char*)malloc(sizeof(char) *vexNum);
+	G->arcs=(int**)malloc(sizeof(int*) *vexNum);
+	for(int i=0;i<vexNum;i++)
+	{
+		G->arcs[i]=(int*)malloc(sizeof(int) *vexNum);
+	}
+	G->vexNum=vexNum;
+	G->arcsNum=0;
+	return G;
+}
+
+//构建一个图
+void createGraph(Graph* G,char* vexs,int* arcs)
+{
+	for(int i=0;i<G->vexNum;i++)
+	{
+		G->vexs[i]=vexs[i];
+		for(int j=0;j<G->vexNum;j++)
+		{
+			G->arcs[i][j]=*(arcs+i*G->vexNum+j);
+			if(G->arcs[i][j]!=0&&G->arcs[i][j]!=MAX)
+			{
+				G->arcsNum++;
+			}
+		}
+	}
+	G->arcsNum=G->arcsNum/2;
+}
+
+//取最小值的函数 
+int getMin(int* d,int* s,Graph* G)
+{
+	int min=MAX;
+	int index;
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(!s[i] && d[i]<min)	//比较权值 
+		{
+			min=d[i];
+			index=i;
+		}
+	}
+	return index;
+}
+
+void dijkstra(Graph* G,int index)	//index为目标节点 
+{
+	/*
+	最短路径(dijkstra算法)：
+		准备辅助数组： 
+		S数组：记录了目标顶点到其他顶点的最短路径是否求得
+		P数组：记录了目标顶点到其他顶点的最短路径的前驱节点
+		D数组：记录了目标顶点到其他顶点的最短路径长度 
+	*/
+	int* s=(int*)malloc(sizeof(int)*G->vexNum); 
+	int* p=(int*)malloc(sizeof(int)*G->vexNum);
+	int* d=(int*)malloc(sizeof(int)*G->vexNum);
+	//对辅助数组进行初始化 
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(G->arcs[index][i]>0 && G->arcs[index][i]!=MAX)
+		{
+			d[i]=G->arcs[index][i];
+			p[i]=index;
+		}
+		else
+		{
+			d[i]=MAX;
+			p[i]=-1;
+		}
+		if(i==index)
+		{
+			s[i]=1;
+			d[i]=0;
+		}
+		else
+		{
+			s[i]=0;
+		}
+	}  
+	for(int i=0;i<G->vexNum-1;i++)
+	{
+		int index=getMin(d,s,G);
+		s[index]=1;		//代表已经找到了最小路径 
+		for(int j=0;j<G->vexNum;j++)
+		{
+			if(!s[j] && d[index]+G->arcs[index][j]<d[j])	//判断是否要重新更新d数组中的最小路径 
+			{
+				d[j]=d[index]+G->arcs[index][j];	 
+				p[j]=index;		//更改 
+			}
+		} 
+	}
+	//输出到达个点的最短路径 
+	for(int i=0;i<=G->vexNum-1;i++)
+	{
+	    int j=i;
+		printf("%c <—— ",G->vexs[i]);	//最后打印所到场所
+	    while(j!=0)
+		{
+			j=p[j];
+	        if(j!=0)
+	        {
+				printf("%c <——  ",G->vexs[j]);	
+			}
+		}  	 
+		printf("%c",G->vexs[index]);
+		printf("\n最短路径大小为：%d",d[i]);
+		printf("\n");
+	}
+}
+
+
+void menu()
+{
+	printf("**************************************************************\n");
+	printf("****  1.查询找出从一个场所出发到达其它所有场所的最佳路径  ****\n");
+	printf("****  2.查询各个场所的功能                                ****\n");
+	printf("****  0.退出程序                                          ****\n");
+	printf("**************************************************************\n");
+}
+
+void hint()
+{
+	printf("1-宿舍        2-一食堂  3-湖滨餐厅  4-图书馆\n");
+	printf("5-二号实验楼  6-礼堂    7-主楼      8-一号门\n");
+}
+
+//各个场所的功能函数
+void feature()
+{
+	printf("请输入场所编号\n");
+	hint();
+	int num;
+	scanf("%d",&num);
+	switch (num) 
+	{
+		case 1:
+			printf("宿舍有公共厨房，公共阅览室，公共厕所\n");
+			break;		
+		case 2:
+			printf("一食堂有丰富的菜品\n");
+			break;	
+		case 3:
+			printf("湖滨餐厅有中西方菜品\n");
+			break;	
+		case 4:
+			printf("图书馆设施好，学习氛围浓烈\n");
+			break;	
+		case 5:
+			printf("实验楼有实验室以及机房\n");
+			break;			
+		case 6:
+			printf("可以在里面举办一些晚会\n");
+			break;	
+		case 7:
+			printf("老师办公区域\n");
+			break;	
+		case 8:
+			printf("看主楼的最好位置\n");
+			break;	
+		default:
+			printf("无该场所编号，请重新输入场所编号\n");
+			break;		
+	}
+}
+
+int main()
+{
+	//打印学校图(注：需要把照片与代码放在用一个文件夹下)
+	char pic_name[80]="school.PNG";
+	char cmd[100];
+	sprintf(cmd,pic_name);
+	system(cmd);
+	Graph* G=initGraph(8);
+	int* visited=(int*)malloc(sizeof(int)*G->vexNum);
+	for(int i=0;i<=G->vexNum;i++)
+	{
+		visited[i]=0;
+	}
+	int arcs[8][8]={	//邻接矩阵(权重(按走到该建筑的时间创立))
+		0,3,6,6,10,5,MAX,4,
+		3,0,4,MAX,MAX,MAX,MAX,MAX,
+		6,4,0,1,6,MAX,MAX,MAX,
+		6,MAX,1,0,5,MAX,MAX,MAX,
+		10,MAX,6,5,0,MAX,3,MAX,
+		5,MAX,MAX,MAX,MAX,0,1,2,
+		MAX,MAX,MAX,MAX,3,1,0,1,
+		4,MAX,MAX,MAX,MAX,2,1,0
+		};
+	printf("学校的平面图为:\n");
+	createGraph(G,"12345678",(int*)arcs);
+	int input;
+	do
+	{
+		Sleep(1000);	//延迟输出1s,方便查看
+		printf("请输入所需要的功能\n");
+		menu();
+		scanf("%d",&input);
+		switch (input) {
+			case 1:
+			{	
+				int n;
+				printf("请输入场所编号\n");
+				hint();	
+				scanf("%d",&n);
+				printf("从该场所到各个场所的最短路径依次是:\n");
+				dijkstra(G,n-1);
+				printf("\n");		
+				break;
+			}
+			case 2:
+			{	
+				feature();
+				break;
+			}
+			case 0:
+			{
+				printf("退出程序\n");
+				break;
+			}
+			default:
+			{	
+				printf("无该功能，请重新输入所需的功能\n");		
+				break;
+			}
+		}
+	}while(input);	
+	return 0;
+}
+ 
