@@ -1,0 +1,64 @@
+/*
+	floyd算法(3 for:[n*n*n]):求每一对顶点之间的最短路径
+	d数组:保存了两点的最短路径长度(权值)
+	p数组:保存了两点之间最短路径前驱
+	核心:试探法，通过加入不同的点进行中转，选择出最优解
+*/
+void floyd(Graph* G)
+{
+	int d[G->vexNum][G->vexNum];
+	int p[G->vexNum][G->vexNum];
+	//数组的初始化
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=0;j<G->vexNum;j++)
+		{
+			d[i][j]=G->arcs[i][j];
+			if(G->arcs[i][j]>0 && G->arcs[i][j]!=MAX)	//两个顶点之间有弧
+			{
+				p[i][j]=i;	//有弧指向前继顶点
+			}
+			else
+			{
+				p[i][j]=-1;
+			}
+		}
+	}
+	/*
+	进行试探法:第一个循环代表着加入的顶点进行试探
+			   后两个循环代表着每一对顶点
+	*/
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=0;j<G->vexNum;j++)
+		{
+			for(int k=0;k<G->vexNum;k++)
+			{
+				if(d[j][i]+d[i][k]<d[j][k])
+				{
+					d[j][k]=d[j][i]+d[i][k];
+					p[j][k]=p[i][k];
+				}
+			}	
+		}
+	}
+	printf("输出最短路径数组:\n");
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=0;j<G->vexNum;j++)
+		{
+			printf("%5d ",d[i][j]);
+		}
+		printf("\n");
+	}
+	printf("输出前继顶点数组:\n");
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=0;j<G->vexNum;j++)
+		{
+			printf("%5d ",p[i][j]);
+		}
+		printf("\n");
+	}	
+	printf("\n");
+}
