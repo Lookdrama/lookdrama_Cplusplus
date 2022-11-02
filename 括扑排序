@@ -1,0 +1,205 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Graph{
+	char* vexs;		//顶点
+	int** arcs;		//边(使用**目的表示矩阵)
+	int vexNum;
+	int arcsNum;
+}Graph;
+
+//初始化一个图
+Graph* initGraph(int vexNum)
+{
+	Graph* G=(Graph*)malloc(sizeof(Graph));
+	G->vexs=(char*)malloc(sizeof(char) *vexNum);
+	G->arcs=(int**)malloc(sizeof(int*) *vexNum);
+	for(int i=0;i<vexNum;i++)
+	{
+		G->arcs[i]=(int*)malloc(sizeof(int) *vexNum);
+	}
+	G->vexNum=vexNum;
+	G->arcsNum=0;
+	return G;
+}
+
+//构建一个图
+void createGraph(Graph* G,char* vexs,int* arcs)
+{
+	for(int i=0;i<G->vexNum;i++)
+	{
+		G->vexs[i]=vexs[i];
+		for(int j=0;j<G->vexNum;j++)
+		{
+			G->arcs[i][j]=*(arcs+i*G->vexNum+j);
+			if(G->arcs[i][j]!=0)
+			{
+				G->arcsNum++;
+			}
+		}
+	}
+	G->arcsNum=G->arcsNum/2;
+}
+
+/*图的遍历：
+BFS:广度优先遍历(等同于树的层次遍历)
+DFS:深度优先遍历(一条路走到黑,不到南墙不回头,撞墙之后再回头，回头之后在撞墙)
+{
+	1.找一个节点访问
+	2.找这个节点可以到达的节点去访问
+	3.重复第一步，直到所有节点访问完毕
+}
+*/	
+
+void DFS(Graph* G,int* visited,int index)	//visited数组用来存放是否遍历
+{
+	printf("%c\t",G->vexs[index]);
+	visited[index]=1;
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(G->arcs[index][i]==1&&!visited[i])
+		{
+			DFS(G,visited,i);
+		}
+	}
+}
+
+/*
+	DAG：有向无环图
+	AOV网：1.图的顶点表示任务 
+		   2.图的弧表示先后依赖关系
+	括扑排序：
+	概念： 括扑排序就是将AOV中的顶点排成一个线性序列，
+		   如果vi->vj有弧的话，那么vi就一定在vj前面
+	作用：判断图里是否有环（若打印的顶点数与图的顶点数相等，则说明图无环；反之即可） 
+*/
+int* find_inDegrees(Graph* G)
+{
+	int* inDegrees=(int*)malloc(sizeof(int)*G->vexNum);
+	for(int i=0;i<G->vexNum;i++)
+	{
+		inDegrees[i]=0;
+	}
+	for(int i=0;i<G->vexNum;i++)
+	{
+		for(int j=0;j<G->vexNum;j++)
+		{
+			if(G->arcs[i][j])
+			{
+				inDegrees[j]=inDegrees[j]+1;	//计算入度 
+			}
+		}
+	}
+	return inDegrees;
+}
+
+/*
+	括扑排序的流程：
+		1.找出没有前驱的顶点(入度为0)，输出它，减掉 以它为出发点的所有边
+		2.重复第一步，直到图中不存在没有前驱的顶点 
+	注：用一个栈存储入度为0的点，节省时间(以空间换时间) 
+*/
+typedef struct Node{
+	int data;
+	struct Node* next;	
+}Node; 
+
+Node* initStack()
+{
+	Node* stack=(Node*)malloc(sizeof(Node));
+	stack->data=0;
+	stack->next=NULL;
+	return stack;	
+}
+
+int isEmpty(Node* stack)
+{
+	if(stack->next==NULL)
+		return 1;
+	else 
+		return 0;	
+}
+
+//进栈 
+void push(Node* stack,int data)
+{
+	Node* node=(Node*)malloc(sizeof(Node));
+	node->data=data;
+	node->next=stack->next;
+	stack->next=node;
+	stack->data++;
+}
+
+//出栈 
+int pop(Node* stack)
+{
+	if(!isEmpty(stack))
+	{
+		Node* node=stack->next;
+		stack->next=node->next;
+		stack->data--;
+		return node->data;
+	} 
+	else
+	{
+		return -1;	
+	}
+}
+
+void topologicalSort(Graph* G)
+{
+	int index=0;	//记录当前数组遍历到那 
+	int* top=(int*)malloc(sizeof(int)*G->vexNum);	//最终的排序序列 
+	int* inDegrees=find_inDegrees(G);
+	Node* stack=initStack();
+	for(int i=0;i<G->vexNum;i++)
+	{
+		if(inDegrees[i]==0)
+		{
+			push(stack,i);
+		}
+	} 
+	while(!isEmpty(stack))
+	{
+		int vex=pop(stack);
+		top[index++]=vex;
+		for(int i=0;i<G->vexNum;i++)
+		{
+			if(G->arcs[vex][i])
+			{
+				inDegrees[i]=inDegrees[i]-1;  //删除入度为零的顶点后，应减去与之相关的弧 
+				if(inDegrees[i]==0)
+				{
+					push(stack,i);
+				} 
+			}
+		} 
+	}
+	for(int i=0;i<index;i++)
+	{
+		printf("%c\t",G->vexs[top[i]]);
+	}
+	printf("\n");
+}
+int main()
+{
+	Graph* G=initGraph(6);
+	int* visited=(int*)malloc(sizeof(int)*G->vexNum);
+	for(int i=0;i<=G->vexNum;i++)
+	{
+		visited[i]=0;
+	}
+	int arcs[6][6]={	//邻接矩阵
+		0,1,1,1,0,0,
+		0,0,0,0,0,0,
+		0,1,0,0,1,0,
+		0,0,0,0,1,0,
+		0,0,0,0,0,0,
+		0,0,0,1,1,0,
+		};
+	createGraph(G,"123456",(int*)arcs);
+	DFS(G,visited,0);
+	printf("\n");
+	topologicalSort(G);
+	return 0;
+}
