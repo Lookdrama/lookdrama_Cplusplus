@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <assert.h>
+ 
+//不能使用字符串的库函数，自定义函数求字符串长度
+int my_strlen(const char* str)
+{
+
+    int number = 0;
+    while (*str++)//当指针str指向'\0'时，跳出循环
+    {
+        number++;
+    }
+    return number;
+}
+ 
+void reverse_string(char* str)
+{
+    int len = my_strlen(str);
+    char tmp = *str;
+    *str = *(str + len - 1);
+    *(str + len - 1) = '\0';
+    if (my_strlen(str + 1) > 1)//字符交换一次后，判断剩下的字符串长度
+    {
+        reverse_string(str + 1);
+    }
+    *(str + len - 1) = tmp;
+ 
+}
+int main()
+{
+    char arr[] = "abcdef";
+    reverse_string(arr);
+    printf("%s\n", arr);
+    return 0;
+}
