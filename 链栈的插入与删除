@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+
+/*链栈结构*/
+typedef struct StackNode
+{
+	int data;
+	struct StackNode *next;
+}StackNode,*LinkStackptr; 
+
+typedef struct LinkStack
+{
+	LinkStackptr top;
+	int count;
+}LinkStack;
+
+/*链栈的初始化*/
+void InitStack(LinkStack *S)
+{ 
+        S->top = (LinkStackptr)malloc(sizeof(StackNode));
+        if(!S->top)  //有无可分配的内存
+            printf("分配内存失败\n");
+        S->top=NULL;
+        S->count=0;
+}
+
+
+/*插入元素e为新的栈顶元素*/
+void Push(LinkStack *S,int e)
+{
+	LinkStackptr s = (LinkStackptr)malloc(sizeof(StackNode));
+	s->data=e;
+	s->next=S->top;	//把当前的栈顶元素赋值给新结点的后继 
+	S->top=s;		//将新的结点s赋值给栈顶指针 
+	S->count++;
+}
+
+//若栈不空，则删除S的栈顶元素
+void Pop(LinkStack *S)
+{
+	LinkStackptr p;
+	if(S->count==0)
+		printf("栈为空，无法打印\n");
+	p=S->top;		//将栈顶结点赋值给p 
+	S->top=S->top->next;	//使得栈顶指针下移一位，指向后一结点 
+	free(p);		//释放结点p 
+	S->count--;
+} 
+ 
+int main()
+{
+	return 0;
+}
