@@ -1,0 +1,123 @@
+//#include<stdio.h>
+//#include<stdlib.h>
+//
+///*
+//	ASL(平均查找长度):衡量查找算法的好坏
+//	ASL=∑(i=1->n)PiCi
+//	Pi为查找概率    Ci为查找次数
+//*/
+//
+//typedef struct List{
+//	int* data;	//元素域
+//	int length; 	//List的长度
+//	int num;	//指向当前线性表中有多少元素
+//}List;
+//
+//List* initList(int length)
+//{
+//	List* list=(List*)malloc(sizeof(list));
+//	list->data=(int*)malloc(sizeof(int)*length);	//为data开辟空间
+//	list->length=length;
+//	list->num=0;
+//	return list;
+//}               
+//
+////若查找失败则需插入该值
+//void listAdd(List* list,int data)
+//{
+//	list->data[list->num]=data;
+//	list->num=(list->num)+1;
+//}
+//
+////遍历线性表
+//void printList(List* list)
+//{
+//	for(int i=0;i<list->num;i++)
+//	{
+//		printf("%d -> ",list->data[i]);
+//	}	
+//	printf("NULL\n");
+//}
+//
+//int search(List* list,int key)
+//{
+//	for(int i=0;i<list->num;i++)
+//	{
+//		if(list->data[i]==key)
+//		{
+//			return i;		//查找成功
+//		}
+//	}
+//	return -1;	//查找失败
+//}
+//                                                    
+//int main()
+//{
+//	List* list=initList(5);
+//	listAdd(list,1);
+//	listAdd(list,2);
+//	listAdd(list,3);
+//	listAdd(list,4);
+//	printList(list);
+//	printf("%d\n",search(list,3));
+//	return 0;
+//}
+
+//带哨兵的顺序查找：可以少判断list是否会超
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct List{
+		int* data;	//元素域
+		int length; 	//List的长度
+		int num;	//指向当前线性表中有多少元素
+}List;
+	
+List* initList(int length)
+{
+	List* list=(List*)malloc(sizeof(list));
+	list->data=(int*)malloc(sizeof(int)*length);	//为data开辟空间
+	list->length=length;
+	list->num=1;
+	return list;
+}               
+	
+//若查找失败则需插入该值
+void listAdd(List* list,int data)
+{
+	list->data[list->num]=data;		
+	list->num=(list->num)+1;
+}
+
+//遍历线性表
+void printList(List* list)
+{
+	for(int i=0;i<list->num;i++)
+	{
+		printf("%d -> ",list->data[i]);
+	}	
+	printf("NULL\n");
+}
+
+int search(List* list,int key)
+{
+	int i;
+	list->data[0]=key;
+	for(i=(list->num)-1;list->data[i]!=key;i--)	//倒着查找
+	{
+		;
+	}
+	return i;
+}
+                                                    
+int main()
+{
+	List* list=initList(5);
+	listAdd(list,4);
+	listAdd(list,5);
+	listAdd(list,6);
+	listAdd(list,7);
+	printList(list);
+	printf("%d\n",search(list,4));
+	return 0;
+}
