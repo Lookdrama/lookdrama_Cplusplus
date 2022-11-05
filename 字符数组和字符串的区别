@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <string.h>
+int main(void)
+{
+    /*字符数组赋初值*/
+    char cArr[] = {'I','L','O','V','E','C'};
+    /*字符串赋初值*/
+    char sArr[] = "ILOVEC";
+    /*用sizeof（）求长度*/
+    printf("cArr的长度=%d\n", sizeof(cArr));
+    printf("sArr的长度=%d\n", sizeof(sArr));
+    /*用strlen（）求长度*/
+    printf("cArr的长度=%d\n", strlen(cArr));
+    printf("sArr的长度=%d\n", strlen(sArr));
+    /*用printf的%s打印内容*/
+    printf("cArr的内容=%s\n", cArr);
+    printf("sArr的内容=%s\n", sArr);
+    return 0;
+}
+/*
+  运行结果为：
+  cArr的长度=6
+  sArr的长度=7
+  cArr的长度=7
+  sArr的长度=6
+  cArr的内容=ILOVEC'
+  sArr的内容=ILOVEC
+*/
