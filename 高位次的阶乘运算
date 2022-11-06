@@ -1,0 +1,34 @@
+#include<stdio.h>
+#define MAX 32767
+int main()
+{
+	int a[MAX];
+	/*
+		f代表这进位数
+		count代表数组最终有多个元素
+	*/
+	int count=1,n,f,temp;	
+	a[0]=1;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++)
+	{
+		f=0;		 //记录进位数
+		for(int j=0;j<count;j++)	//每一位数乘i
+		{
+			temp=a[j]*i+f;	//temp记录每一位数乘i加上进位之后的数
+			a[j]=temp%10;	//a[j]里存放不超过10的整数
+			f=temp/10;		//记录应进位数
+		}
+		while(f)	//位数增加的进位
+		{
+			a[count]=f%10;
+			f=f/10;
+			count++;
+		}
+	}
+	for(int i=count-1;i>=0;i--)		 //逆序打印
+	{
+		printf("%d",a[i]);
+	}
+	return 0;
+}
