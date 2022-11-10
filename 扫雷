@@ -1,0 +1,89 @@
+#include "game.h"
+
+void initboard(char board[ROWS][COLS],int rows,int cols,char a)
+{
+	for(int i=0;i<rows;i++)
+	{
+		for(int j=0;j<cols;j++)
+		{
+			board[i][j]=a;
+		}
+	}
+}
+
+void Printboard(char board[ROWS][COLS],int row,int col)
+{
+	printf("---------扫雷---------\n");
+	//打印序列号
+	for(int j=0;j<=col;j++)
+	{
+		printf("%d ",j);
+	}
+	printf("\n");
+	for(int i=1;i<=row;i++)
+	{
+		printf("%d ", i);
+		for(int j=1;j<=col;j++)
+		{
+			printf("%c ",board[i][j]);
+		}
+		printf("\n");
+	}
+	printf("---------扫雷---------\n");
+}
+
+void SetMine(char mine[ROWS][COLS],int row,int col)
+{
+	int count=EASY_COUNT;
+	while(count)
+	{
+		int x=rand()%row+1;
+		int y=rand()%col+1;
+		if(mine[x][y]=='0')
+		{
+			mine[x][y]='1';
+			count--;
+		}	
+	}
+}
+
+int get_mine_count(char mine[ROWS][COLS],int x,int y)
+{
+	return (mine[x-1][y]+mine[x-1][y-1]+mine[x-1][y-1]
+	+mine[x][y-1]+mine[x][y+1]+mine[x+1][y-1]+mine[x+1][y]+mine[x+1][y+1]-8*'0');
+}
+
+void FindMine(char mine[ROWS][COLS],char show[ROWS][COLS],int row,int col)
+{
+	int x,y,win;
+	while(win<row*col-EASY_COUNT)
+	{
+		printf("请输入要排查的坐标:>"); 
+		scanf("%d%d",&x,&y);
+		if(x>=1 && y<=row && y>=1&&y<=col)
+		{
+			if(show[x][y]!='*')
+			{
+				printf("该坐标被排查过了\n");
+				continue;
+			}
+			if(mine[x][y]=='1')
+			{
+				printf("很遗憾，你被炸死了\n");
+				Printboard(mine,ROW,COL);
+				break;
+			}	
+			else
+			{
+				int n=get_mine_count(mine,x,y);
+				show[x][y]=n+'0';
+				Printboard(show,ROW,COL);
+			}			
+		}		
+	}
+	if(win==row*col-EASY_COUNT)
+	{
+		printf("恭喜你排雷成功\n");
+		Printboard(mine,ROW,COL);
+	}
+}
