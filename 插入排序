@@ -1,0 +1,46 @@
+#include<stdio.h>
+
+/*
+	插入排序(是一种稳定排序):
+	步骤:
+		1.从第二个元素开始，去它跟之前的序列进行比较，找到合适的插入位置
+		2.移动元素，指针后移 
+*/
+
+void insertSort(int arr[],int length)
+{
+	 
+	for(int i=1;i<length;i++)	 //外层循环从第二个元素开始比较
+	{
+		for(int j=0;j<i;j++) 	//比较从0 - 它们前一个元素之间有没有合适的位置插入
+		{
+			if(arr[i]<arr[j])
+			{
+				int temp=arr[i];
+				for(int k=i-1;k>=j;k--)
+				{
+					arr[k+1]=arr[k];
+				}
+				arr[j]=temp; 
+			}
+		}
+	}
+}
+
+void printArr(int arr[],int length)
+{
+	for(int i=0;i<length;i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	printf("\n");
+}
+
+int main()
+{
+	int arr[6]={4,3,5,1,9,6};
+	printArr(arr,6);
+	insertSort(arr,6);
+	printArr(arr,6);	
+	return 0;
+}
