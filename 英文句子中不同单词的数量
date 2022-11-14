@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#define MAX 1000
+
+int tempvalue(int i,char arr[])
+{
+    int k=0;
+    for ( k = i - 1; k >= 0; k--)//注意1：结束循环时k为-1
+    {
+        if (arr[k] == ' ')
+            break;
+    }
+    if (k > 0)
+        return k + 1;
+    else 
+        return 0;   
+}
+
+int main()
+{
+	char str[MAX];	
+	char str1[MAX][MAX]={'\0'}; //存放单词
+	gets(str);
+	int count=0;
+	int len=strlen(str);
+	int k=0;
+	for(int i=0;i<=len;i++)
+	{
+		int temp=0;
+		if(str[i]==' '||str[i]=='\0')
+		{
+			for(int j=tempvalue(i,str);j<i;j++)
+			{
+				str1[k][temp++]=str[j];
+			}
+			k++;
+			count++;
+		}
+	}
+	for(int i=0;i<k-1;i++)
+	{
+		for(int j=i+1;j<k;j++)
+		{
+			if (strcmp(str1[i], str1[j]) == 0 && strcmp(str1[j],"123") != 0)
+			{	
+				count--;
+				strcpy(str1[j],"123");
+			}
+		}
+	}
+	printf("%d",count);
+	return 0;
+}
