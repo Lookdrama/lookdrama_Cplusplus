@@ -1,0 +1,21 @@
+#include<stdio.h>
+
+int get_one(int n)
+{
+
+	int count = 0;
+	while(n!= 0)
+	{
+		count++;
+	    n = n & (n - 1);
+	}
+	return count;
+}
+
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	printf("%d",get_one(n));
+	return 0;
+}
