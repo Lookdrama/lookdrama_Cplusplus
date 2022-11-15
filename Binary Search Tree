@@ -1,0 +1,103 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+/*
+	Binary Search Tree(BST):
+	一颗二叉树，左子树上的所有节点的值都比根节点小，
+	右子树上的所有的节点的值都比根节点大，
+	同时这个性质是递归的
+	注：树中的节点的值不能重复
+	
+	功能:
+	1.建立一个二叉排序树
+	2.在二叉树中查找值
+*/
+
+typedef struct TreeNode{
+	int data;
+	struct TreeNode* lchild;	//左孩子
+	struct TreeNode* rchild;	//右孩子
+}TreeNode;
+
+//查找
+TreeNode* bstSearch(TreeNode* T,int key)
+{
+	if(T)
+	{
+		if(T->data==key)
+		{
+			return T;
+		}
+		else if(key<T->data)
+		{
+			return bstSearch(T->lchild,key);
+		}
+		else
+		{
+			return bstSearch(T->rchild,key);
+		}
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void bstInsert(TreeNode** T,int key)
+{
+	if(*T==NULL)
+	{
+		*T=(TreeNode*)malloc(sizeof(TreeNode));
+		(*T)->data=key;
+		(*T)->lchild=NULL;
+		(*T)->rchild=NULL;
+	}
+	else if(key==((*T)->data))
+	{
+		return;
+	}
+	else if((*T)->data>key)
+	{
+		bstInsert(&(*T)->lchild,key);
+	}
+	else
+	{
+		bstInsert(&(*T)->rchild,key);
+	}
+}
+
+void PreOrder_Traverase(TreeNode* T)
+{
+	if (T == NULL)
+		return;
+	else
+	{
+		printf(" %d ", T->data);
+		PreOrder_Traverase(T->lchild);
+		PreOrder_Traverase(T->rchild);
+	}
+}
+
+int main()
+{
+	TreeNode* T=NULL;
+	int nums[6]={4,5,19,23,2,8};
+	for(int i=0;i<6;i++)
+	{
+		bstInsert(&T,nums[i]);
+	}
+	PreOrder_Traverase(T);
+	bstSearch(T,19);
+	int key=19;
+	TreeNode* result=bstSearch(T,key);
+	printf("\n");
+	if(result)
+	{
+		printf("查找成功：%d \n",result->data);
+	}
+	else
+	{
+		printf("查找失败\n");	
+	}
+	return 0;
+}
