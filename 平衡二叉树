@@ -1,0 +1,137 @@
+/*
+	平衡二叉树(AVL):
+	平衡二叉树是一棵合理的二叉排序树
+		
+	怎么保证合理性?
+	平衡二叉树的左右子树高度差不超过 1
+	
+	如何构建一棵平衡二叉树
+	1.本质跟构建二叉排序树一致
+	2.在构建二叉排序树的过程中，如果发现树不符合特性，需要进行调整
+	调整类型：LL RR RL LR
+	
+	如何判断调整类型?
+	1.找到失衡树的根节点   root
+	2.找到导致树失衡的节点	node
+		node在root的哪一侧
+	3.判断node在root孩子的哪一侧
+	4.如果遇到多棵树不平衡，选择最小树
+	
+	如何调整平衡?
+	RR:取中间的节点，使它的父亲成为它的左孩子，
+	   如果它有左孩子的话，那么这个左孩子连接到父亲的右孩子上面
+	代码: root->rchild=node->lchild;
+		  node->lchild=root
+	LL:取中间节点，将它父亲作为自己的右孩子，如果自己有右孩子的话，
+	   那么将自己的右孩子，连接到父亲的左孩子上
+	代码: root->lchild=node->rchild
+		  node->rchild=root
+	LR:取最后一个节点，作为父亲节点，同时将它的父亲作为自己的左孩子
+	   将它的父亲的父亲作为自己的右孩子，如果它有左孩子或者右孩子的话，
+	   它原先的左孩子，连接父亲的右孩子上；
+	   原先的右孩子，连接到父亲的父亲的左孩子上
+	RL:取最后一个节点，作为父亲节点，同时将它的父亲作为自己的右孩子
+	   将它的父亲的父亲作为自己的左孩子，如果它有左孩子或者右孩子的话，
+	   它原先的左孩子，连接父亲的左孩子上；
+	   原先的右孩子，连接到父亲的父亲的右孩子上
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct TreeNode {
+    int data;
+    int height;
+    struct TreeNode* lchild;
+    struct TreeNode* rchild;
+}TreeNode;
+
+int getHeight(TreeNode* node) {
+    return node ? node -> height : 0;
+}
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+void rrRotation(TreeNode* node, TreeNode** root) {
+    TreeNode* temp = node -> rchild;
+    node -> rchild = temp -> lchild;
+    temp -> lchild = node;
+    node -> height = max(getHeight(node -> lchild), getHeight(node -> rchild)) + 1;
+    temp -> height = max(getHeight(temp -> lchild), getHeight(temp -> rchild)) + 1;
+    *root = temp;
+}
+
+void llRotation(TreeNode* node, TreeNode** root) {
+    TreeNode* temp = node -> lchild;
+    node -> lchild = temp -> rchild; 
+    temp -> rchild = node;
+    node -> height = max(getHeight(node -> lchild), getHeight(node -> rchild)) + 1;
+    temp -> height = max(getHeight(temp -> lchild), getHeight(temp -> rchild)) + 1;
+    *root = temp;
+}
+
+void avlInsert(TreeNode** T, int data) {
+    if (*T == NULL) {
+        *T = (TreeNode*)malloc(sizeof(TreeNode));
+        (*T) -> data = data;
+        (*T) -> height = 0;
+        (*T) -> lchild = NULL;
+        (*T) -> rchild = NULL;
+    }
+    else if (data < (*T) -> data) {
+        avlInsert(&(*T) -> lchild, data);
+        // 拿到当前节点左右子树的高度
+        int lHeight = getHeight((*T) -> lchild);
+        int rHeight = getHeight((*T) -> rchild);
+        // 判断高度差
+        if (lHeight - rHeight == 2) {
+            if (data < (*T) -> lchild -> data) {
+                // LL 调整
+                llRotation(*T, T);
+            }
+            else {
+                // LR 调整
+                rrRotation((*T) -> lchild, &(*T) -> lchild);
+                llRotation(*T, T);
+            }
+        }
+    }
+    else if (data > (*T) -> data) {
+        avlInsert(&(*T) -> rchild, data);
+        // 拿到当前节点左右子树的高度
+        int lHeight = getHeight((*T) -> lchild);
+        int rHeight = getHeight((*T) -> rchild);
+        // 判断高度差
+        if (rHeight - lHeight == 2) {
+            if (data > (*T) -> rchild -> data) {
+                // RR 调整
+                rrRotation(*T, T);
+            }
+            else {
+                // RL 调整
+                llRotation((*T) -> rchild, &(*T) -> rchild);
+                rrRotation(*T, T);
+            }
+        }
+    }
+    (*T) -> height = max(getHeight((*T) -> lchild), getHeight((*T) -> rchild)) + 1;
+}
+
+void preOrder(TreeNode* T) {
+    if (T) {
+        printf("%d ", T -> data);
+        preOrder(T -> lchild);
+        preOrder(T -> rchild);
+    }
+}
+
+int main() {
+    TreeNode* T = NULL;
+    int nums[5] = {1,8,6,7,10};
+    for (int i = 0; i < 5; i++) {
+        avlInsert(&T, nums[i]);
+    }
+    preOrder(T);
+    printf("\n");
+}
