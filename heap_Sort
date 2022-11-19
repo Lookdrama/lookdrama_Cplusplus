@@ -1,0 +1,81 @@
+#include<stdio.h>
+
+/*
+	堆排序
+	1.heap（堆）是什么？
+		a.Complete Binary Tree（完全二叉树）
+		b.parent>children
+	2.如何构建一个heap：heapify
+		从第最后一层开始：
+		将parent和children中最大的作为父节点，以此往上。
+	3.如何进行堆排序
+		a.在建立好堆后，可得根结点是最大结点
+		b.将根结点和最后一个索引结点进行交换
+		c.将最大结点拿出,重新进行堆排序
+		d.重复进行该操作
+*/
+
+void swap(int arr[],int i,int j)
+{
+	int temp=arr[i];
+	arr[i]=arr[j];
+	arr[j]=temp;
+}
+
+//用数组代表一课树，n是这个树有几个结点，i是对哪一个结点操作
+void heapify(int tree[],int n,int i)	
+{
+	if(i<=n)	//递归出口
+	{
+		int c1=2*i+1;	//孩子结点
+		int c2=2*i+2;	//孩子结点
+		int max=i;
+		if(tree[c1]>tree[max] && c1<n)
+		{
+			max=c1;
+		}
+		if(tree[c2]>tree[max] && c2<n)
+		{
+			max=c2;
+		}
+		if(max != i)
+		{
+			swap(tree,max,i);
+			heapify(tree,n,max);
+		}	
+	}
+}
+
+//建立一个堆
+void build_heap(int tree[],int n)
+{
+	int last_node=n-1;
+	int parent_node=(last_node-1)/2;
+	for(int i=parent_node;i>=0;i--)
+	{
+		heapify(tree,n,i);
+	}
+}
+
+//堆排序
+void heap_Sort(int tree[],int n)
+{
+	build_heap(tree,n);
+	for(int i=n-1;i>=0;i--)
+	{
+		swap(tree,i,0);
+		heapify(tree,i,0);
+	}
+}
+
+int main()
+{
+	int tree[]={2,5,3,1,10,4};
+	int n=sizeof(tree)/sizeof(tree[1]);
+	heap_Sort(tree,n);
+	for(int i=0;i<n;i++)
+	{
+		printf("%d ",tree[i]);
+	}		
+	return 0;
+}
