@@ -1,0 +1,98 @@
+// 仅仅是展示 菜单的代码  一些功能性函数就清空了
+#include"HaffumanTree.h"
+
+//下面是主菜单的实现 实现的细节和子菜单的类似 
+void drawMenu(HFTree* T, int len, huffmanCode& HC) 
+{
+abcd:;
+	MOUSEMSG m;
+	//菜单
+	initgraph(800, 600);
+	setbkcolor(WHITE);
+	cleardevice();//刷新一次 略等于那个system(cls)
+	setfillcolor(LIGHTBLUE);
+	settextcolor(BLACK);
+	settextstyle(45, 0, "楷体");
+	outtextxy(250, 100, "哈夫曼编码系统");
+	//           左边1 高1 左边2 高2
+	fillrectangle(300, 200, 500, 240);
+	fillrectangle(300, 260, 500, 300);
+	fillrectangle(300, 320, 500, 360);
+	fillrectangle(300, 380, 500, 420);
+	settextstyle(15, 0, "楷体");//设置文字格式
+	setbkmode(TRANSPARENT);// 去掉文字背景
+	outtextxy(340, 215, "哈夫曼树01编码查看");
+	outtextxy(345, 275, "生成哈夫曼树编码");
+	outtextxy(360, 335, "哈夫曼树解码");
+	outtextxy(360, 395, "退出程序");
+	IMAGE smbu1,smbu2;
+	//loadimage(&smbu1, "smbu1.png", 100, 100);
+	//putimage(0, 0, &smbu1); 
+	loadimage(&smbu2, "smbu2.png", 300, 90);
+	putimage(0, 0, &smbu2);
+	while (1) {
+		m = GetMouseMsg();
+		if (m.x >= 300 && m.x <= 500 && m.y >= 200 && m.y <= 240) {//
+			setlinecolor(RED);
+			rectangle(295, 195, 505, 245);
+			if (m.uMsg == WM_LBUTTONDOWN) {
+				closegraph();
+				HaffumanTree(T, len,HC);
+				closegraph();
+				goto abcd;
+			}
+		}
+		else if (m.x >= 300 && m.x <= 500 && m.y >= 260 && m.y <= 300) {//
+			setlinecolor(RED);
+			rectangle(295, 255, 505, 305);
+			if (m.uMsg == WM_LBUTTONDOWN) {
+				closegraph();
+				HaffumanTreeCode(T, len, HC);
+				closegraph();
+				goto abcd;
+			}
+		}
+		else if (m.x >= 300 && m.x <= 500 && m.y >= 320 && m.y <= 360) {
+			setlinecolor(RED);
+			rectangle(295, 315, 505, 365);
+			if (m.uMsg == WM_LBUTTONDOWN) {
+				closegraph();
+				HaffumanTreeDecode(T, len);
+				closegraph();
+				goto abcd;
+			}
+		}
+		else if (m.x >= 300 && m.x <= 500 && m.y >= 380 && m.y <= 420) {
+			setlinecolor(RED);
+			rectangle(295, 375, 505, 425);
+			if (m.uMsg == WM_LBUTTONDOWN) {
+				exit(0);
+			}
+		}
+		else {
+			setlinecolor(WHITE);
+			rectangle(295, 195, 505, 245);
+			rectangle(295, 255, 505, 305);
+			rectangle(295, 315, 505, 365);
+			rectangle(295, 375, 505, 425);
+		}
+	}
+	getchar();
+	closegraph();
+}
+
+//这里是主函数！ 仅仅调用了主菜单的函数。
+int main()
+{
+	int input;
+	int weight[] = { 186,64,13,22,32,103,21,15,47,57,1,5,32,20,57,63,15,1,48,51,80,23,8,18,1,16,1 };
+	char arr[] = { ' ','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+	int len = sizeof(weight) / sizeof(weight[0]);	//求出权值数组长度;
+	HFTree* T = initTree(weight, arr, len);
+	huffmanCode HC;
+	createHFTree(T);
+	createHuffmanCode(T, HC, len);
+	drawMenu(T,len,HC);
+	return 0;
+}
+
