@@ -1,0 +1,34 @@
+#include<stdio.h>
+
+int main()
+{
+	int m,n,temp=0;
+	int sum=0;
+	scanf("%d%d",&m,&n);
+	int a[m][n];
+	for(int i=0;i<m;i++)	//上边界 
+	{
+		for(int j=i;j<m;j++)		//下边界 
+		{
+			for(int k=0;k<n;k++)	//左边界 
+			{
+				for(int l=k;l<n;l++)	//右边界 
+				{
+					for(int p=i;p<j;p++)
+					{
+						for(int q=k;q<l;j++)
+						{
+							temp+=a[p][q];
+						}
+					}
+					if(sum<temp)
+					{
+						sum=temp;
+					}
+				}
+			}
+		}		
+	}
+	printf("%d",sum);
+	return 0;
+}
