@@ -1,0 +1,15 @@
+#include<stdio.h>
+ 
+int sumn(int n){
+	if (n == 2 || n == 1)  # 当只有一阶台阶和二阶台阶时的情况我们是已知的
+		return n;
+    else
+        return sumn(n-1) + sumn(n-2);  # 递归主体
+}
+ 
+int main(){
+    int n ;
+    scanf("%d", &n); 
+    printf("%d", sumn(n)); 
+    return 0;
+}
