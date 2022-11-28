@@ -1,0 +1,38 @@
+#include<stdio.h>
+int main()
+{
+    int n,a[1001],b[1001],i,j,k; //a数组来记录美味度  b数组来记录最大次数 
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    for(i=0;i<n;i++)   
+    {
+        b[i]=1;
+    }
+    for(i=1;i<n;i++)
+    {
+        k=1;
+        for(j=0;j<i;j++)
+        {
+            if(a[i]>=a[j])
+            {
+                if(b[i]+b[j]>k)
+                {
+                    k=b[i]+b[j];
+                }
+            }
+        }b[i]=k;
+    }
+    k=b[0];
+    for(i=1;i<n;i++)
+    {
+        if(k<b[i])
+        {
+            k=b[i];
+        }
+    }
+    printf("%d",k);
+    return 0;
+}
