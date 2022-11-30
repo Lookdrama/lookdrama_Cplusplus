@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int main()
+{
+	char a[1000];
+	gets(a);
+	int count=1;
+	int i=0;
+	while(a[i]!='\0')
+	{
+		if(a[i]==' ')
+		{
+			count++;
+		}
+		i++;
+	}
+	int len=strlen(a);
+	char b[1000][1000];
+	i=1;
+	for(int j=0;j<len;j++)
+	{
+		if(a[j]==' ')
+		{
+			i++;
+			continue;	
+		}
+		b[i][j]=a[j];
+	}
+	for(int j=count;j>=1;j--)
+	{
+		for(int k=0;k<len;k++)
+		{
+			printf("%c",b[j][k]);
+		}
+	}	
+	return 0;
+}
