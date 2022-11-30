@@ -3,7 +3,7 @@
 #include<string.h>
 int main()
 {
-	char a[1000];
+	char a[100]
 	gets(a);
 	int count=1;
 	int i=0;
@@ -16,23 +16,26 @@ int main()
 		i++;
 	}
 	int len=strlen(a);
-	char b[1000][1000];
+	char b[100][100];
 	i=1;
+	int k=0;
 	for(int j=0;j<len;j++)
-	{
+	{	
 		if(a[j]==' ')
 		{
+			b[i][k]='\0';
 			i++;
-			continue;	
+			k=0;
 		}
-		b[i][j]=a[j];
+		else
+		{
+			b[i][k++]=a[j];
+		}		
 	}
+	b[i][k]='\0';
 	for(int j=count;j>=1;j--)
 	{
-		for(int k=0;k<len;k++)
-		{
-			printf("%c",b[j][k]);
-		}
+		printf("%s ",b[j]);
 	}	
 	return 0;
 }
