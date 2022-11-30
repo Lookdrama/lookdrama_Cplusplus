@@ -1,0 +1,21 @@
+#include<stdio.h>
+
+int main()
+{
+	int n,m,temp;
+	printf("请输入两个数\n");
+	scanf("%d%d",&n,&m);
+	if(n>m)
+	{
+		temp=n;
+		n=m;
+		m=temp;
+	}
+	int i=1;
+	while((n*i)%m)
+	{
+		i++;
+	}
+	printf("%d",n*i);
+	return 0;
+}
