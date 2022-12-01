@@ -137,7 +137,7 @@ void replace_string()
 }
 
 /*
-	String比较：按ASCII码进行比较
+	String比较：按ASCII码进行比较(主要是判断两个字符串是否相等)
 	= 返回 0
 	> 返回 1
 	< 返回 -1
