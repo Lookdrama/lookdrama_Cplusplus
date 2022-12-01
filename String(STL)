@@ -1,0 +1,147 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+	String创建：
+	string();	//创建一个空的字符串
+	string(const char* s);	//使用字符串s初始化
+	string(const string& str);	//使用一个string对象初始化另一个string对象
+	string(int n,char c)		//使用n个字符c初始化 
+*/
+
+void initstring()
+{
+	string s1;	//创建空字符串，调用无参构造函数
+	cout<<"str1= "<<s1<<endl; 
+	
+	const char* str="Hello World";
+	string s2(str);
+	cout<<"str2= "<<s2<<endl;
+	
+	string s3(s2);
+	cout<<"str3= "<<s3<<endl;
+	
+	string s4(10,'a');
+	cout<<"str4= "<<s4<<endl;
+}
+
+/*
+	String赋值:
+	string& operator=(const char *s); 		//char*类型字符串 赋值给当前的字符串	 
+	string& operator=(const string *s); 	//把当前的字符串s赋值给当前的字符串	 
+	string& operator=(char c); 				//字符赋值给当前的字符串	 
+	string& assign(const char *s); 			//把字符串s赋给当前的字符串	 
+	string& assign(const char *s, int n); 	//把字符串的前n个字符赋值给当前字符串	 
+	string& assign(const string &s); 		//把字符串s赋给当前字符串	 
+	string& assign(int n, char c); 			//用n个字符c赋给当前字符串
+	 
+*/
+
+void assign_string()
+{
+	string str1;
+		str1 = "hello world";
+		cout << "str1=" << str1 << endl;
+	 
+		string str2;
+		str2 = str1;
+		cout << "str2=" << str2 << endl;
+	 
+		string str3;
+		str3 = 'a';
+		cout << "str3=" << str3 << endl;
+	 
+		string str4;
+		str4.assign("hello, C++");
+		cout << "str4=" << str4 << endl;
+	 
+		string str5;
+		str5.assign("hello, c++", 5);
+		cout << "str5=" << str5 << endl;
+	 
+		string str6;
+		str6.assign(str5);
+		cout << "str5=" << str5 << endl;
+	 
+		string str7;
+		str7.assign(7, 'w');
+		cout << "str7=" << str7 << endl;
+}
+
+/*
+	String拼接:	实现在字符串末尾拼接字符串 
+	string& operator+=(const char*str);   //重载+=操作符
+	string&operator+=(const char c);  //重载+=操作符
+	string&operator+=(const string& str);  //重载+=操作符
+	string& append(const char *s);   //把字符串s连接到当前字符串结尾
+	string& append(const char *s);   //把字符串s连接到当前字符串结尾
+	string& append(const char *s);   //把字符串s连接到当前字符串结尾
+	string& append(const char *s,int n);   //把字符串s的前n个字符连接到当前字符串结尾
+	string& append(const string &s);   //同operator+=(const string& str)
+	string& append(const string &s,int pos,int n);   //把字符串s中从pos开始的n个字符连接到当前字符串结尾
+*/
+
+void append_string()
+{
+	string str1="我";
+	str1+="爱打代码";
+	cout<<"str1= "<<str1<<endl;
+	    
+	string str2=" C  C++";
+	str2+=str2;
+	cout<<"str2= "<<str2<<endl;
+	
+	string str3="I";
+	str3.append(" love ");
+	str3.append("code abcd",4);
+	cout<<"str3= "<<str3<<endl;
+	str3.append(str2,2,3);
+	cout<<"str3= "<<str3<<endl;
+}
+
+/*
+	String查找和替换:
+	查找：查找指定字符串是否存在
+	替换：在指定的位置替换字符串
+	* int find(const string& str, int pos=0) const;//查找str第一次出现的位置，从pos位置开始查找
+	* int rfind(const char string& str, int pos=npos) const; //查找字符c第一次出现的位置
+	* string& replace(int pos, int n, const string& str); //替换从pos开始的n个字符为字符串str
+*/
+
+void find_string()
+{
+	string str1="abcdefgde";
+	
+	//从左往右查 
+	int pos =str1.find("de");
+	if(pos==-1)	//未找到输出-1 
+	{
+		cout<<"未找到"<<endl; 
+	}
+	else
+	{
+		cout<<"pos= "<<pos<<endl;	
+	}
+	
+	//从右往左查 
+	pos=str1.rfind("de");
+	cout<<"pos= "<<pos<<endl;
+}
+
+void replace_string()
+{
+	string str1="abcdefgde";
+	str1.replace(1,3,"11111");
+	cout<<"str1= "<<str1<<endl;
+}
+
+int main()
+{
+	//initstring();
+	//assign_string();
+	//append_string();
+	find_string();
+	replace_string();
+	return 0;
+}
