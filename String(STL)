@@ -136,12 +136,40 @@ void replace_string()
 	cout<<"str1= "<<str1<<endl;
 }
 
+/*
+	String比较：按ASCII码进行比较
+	= 返回 0
+	> 返回 1
+	< 返回 -1
+	int compare(const string/char* &s) const	//与字符串s进行比较 
+*/
+
+void compare_string()
+{
+	string str1="hello";
+	string str2="aello";
+	int ret=str1.compare(str2);
+	if(ret==0)
+	{
+		cout<<"str1 = str2"<<endl; 
+	}
+	else if(ret>0)
+	{
+		cout<<"str1 > str2"<<endl;
+	}
+	else
+	{
+		cout<<"str1 < str2"<<endl;	
+	}
+}
+
 int main()
 {
 	//initstring();
 	//assign_string();
 	//append_string();
-	find_string();
-	replace_string();
+	//find_string();
+	//replace_string();
+	compare_string();
 	return 0;
 }
