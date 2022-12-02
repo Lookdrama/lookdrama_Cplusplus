@@ -163,6 +163,37 @@ void compare_string()
 	}
 }
 
+/*
+	String 插入和删除:对字符串进行插入和删除字符的操作	
+	string& insert(int pos, const char* s); //插入字符串
+	string& insert(int pos, const string& str); //插入字符串
+	string& insert(int pos, int n, char c); //在指定位置插入n个字符c
+	string& erase(int pos, int n = npos); //删除从Pos开始的n个字符
+*/
+
+void insert_String()
+{
+	string str1="hello";
+	//插入 
+	str1.insert(5," world");
+	cout<<str1<<endl;
+	//删除 
+	str1.erase(5,6);
+	cout<<str1<<endl;
+} 
+
+/*
+	String子串:从字符串中获取想要的子串
+	string substr(int pos=0,int n=npos) const;	//返回由pos开始的n个字符组成的字符串 
+*/
+
+void substr_String()
+{
+	string str1="nihao";
+	string str2=str1.substr(0,2);
+	cout<<str2<<endl;
+}
+
 int main()
 {
 	//initstring();
@@ -170,6 +201,8 @@ int main()
 	//append_string();
 	//find_string();
 	//replace_string();
-	compare_string();
+	//compare_string();
+	//insert_String();
+	substr_String();
 	return 0;
 }
