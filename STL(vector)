@@ -1,6 +1,5 @@
 #include<iostream>
 #include<vector>
-#include<stdio.h>
 #include<algorithm>
 using namespace std;
 
@@ -11,50 +10,200 @@ using namespace std;
 	迭代器(相当于一个指针)：vector<int>;;iterator
 */
 
-
-void print(int i)
+//打印Vector 
+void printVector(vector<int>& v)
 {
-	printf("%d ",i);
-}
-
-void test01()
-{
-	//创建一个vector容器，并且通过模板参数指定容器种存放的数据类型
-	vector<int> v;
-	
-	//向容器中放数据
-	v.push_back(10);
-	v.push_back(20);
-	v.push_back(30);
-	v.push_back(40);
-	
 	//每一个容器都有自己的迭代器，迭代器用来遍历容器中的元素
 	//v.begin()返回迭代器，这个迭代器指向容器中的第一个元素
-	//v.end()返回迭代器，这个迭代器指向容器中的最后一个元素的下一个位置
-	vector<int>::iterator pBegin=v.begin();	//定义一个迭代器
-	vector<int>::iterator pEnd=v.end();
-	
-	//第一种遍历方式：
-	while(pBegin!=pEnd)
-	{
-		printf("%d ",*pBegin++);
-	}
-	printf("\n");
-	
-	//第二种遍历方式
+	//v.end()返回迭代器，这个迭代器指向容器中的最后一个元素的下一个位置	
 	for(vector<int>::iterator it=v.begin();it!=v.end();it++)
 	{
 		printf("%d ",*it);
 	}
 	printf("\n");
+}
+
+void init_vector()
+{
+	//创建一个vector容器，并且通过模板参数指定容器种存放的数据类型
+	vector<int> v1;	
+	//向容器中放数据
+	v1.push_back(10);
+	v1.push_back(20);
+	v1.push_back(30);
+	v1.push_back(40);
+	printVector(v1);
 	
-	//第三种遍历方式
-	//使用STL提供的标准遍历算法 -> 头文件 -> algorithm
-	for_each(v.begin(),v.end(),print);		//开始迭代器，结束迭代器，函数
+	vector<int> v2(v1.begin(),v1.end());
+	printVector(v2);
+	
+	vector<int> v3(10,100);
+	printVector(v3);
+	
+	vector<int> v4(v3);
+	printVector(v4);
+}
+
+/*
+	Vector赋值操作:
+	vector& operator=(const vector &vec);	//重载等号操作符
+	assgin(beg,end); 		//将[beg,end)区间中的数据拷贝赋值给本身 
+*/
+
+void assgin_Vector()
+{
+	vector<int> v1;
+	for(int i=0;i<10;i++)
+	{
+		v1.push_back(i);
+	}
+	printVector(v1);
+	
+	vector<int> v2;
+	v2=v1;
+	printVector(v2);
+	
+	vector<int> v3;
+	v3.assign(v1.begin(),v1.end());
+	printVector(v3);
+}
+
+/*
+	Vector容量和大小:
+	size();						返回容器的大小
+	empty();					判断容器是否为空
+	max_size();					返回容器最大的可以存储的元素
+	capacity();					返回容器当前能够容纳的元素数量 
+	resize(int num,elem);		重新指定容器的长度num,若容器变长，则以elem值填充新位置 
+*/
+
+void size_Vector()
+{
+	vector<int> v1;
+	for(int i=0;i<10;i++)
+	{
+		v1.push_back(i);
+	}
+	printVector(v1);
+	
+	if(v1.empty())
+	{
+		cout<<"v1为空"<<endl;
+	}
+	else
+	{
+		cout<<"v1不为空"<<endl;	
+		cout<<"v1的容量: "<<v1.capacity()<<endl;
+		cout<<"v1的大小："<<v1.size()<<endl; 
+	}
+	
+	//resize()重新指定大小
+	v1.resize(15,10);
+	printVector(v1); 
+}
+
+/*
+	Vector插入和删除:
+	push_back(ele); //尾部插入元素ele
+	pop_back(); //删除最后一个元素
+	insert(const_iterator pos, ele); //迭代器指向位置pos插入元素ele
+	insert(const_iterator pos, int count,ele);//迭代器指向位置pos插入count个元素ele
+	erase(const_iterator pos); //删除迭代器指向的元素
+	erase(const_iterator start, const_iterator end);//删除迭代器从start到end之间的元素
+	clear(); //删除容器中所有元素
+*/
+
+void insert_Vector()
+{
+	vector<int> v1;
+	//尾插 
+	v1.push_back(10);
+	v1.push_back(20);
+	printVector(v1);
+	
+	//尾删
+	v1.pop_back();
+	printVector(v1);
+	
+	//在任意位置插入
+	v1.insert(v1.begin()+1,100);
+	printVector(v1); 
+	
+	//在任意位置删除 
+	v1.erase(v1.begin());
+	printVector(v1);
+}
+ 
+ /*
+ 	Vector数据存取:
+	at(int index); 		//返回索引index所指的数据
+	operator[index];	//返回索引index所指的数据
+	front();			//返回容器中第一个数据元素
+	back();				//返回容器中最后一个数据元素 
+ */
+ 
+void at_Vector()
+{
+	vector<int> v1;
+	for(int i=0;i<10;i++)
+	{
+		v1.push_back(i);
+	}
+	printVector(v1);
+	for(int i=0;i<10;i++)
+	{
+		printf("%d ",v1[i]);
+	}	
+} 
+
+/*
+	Vector互换容器:实现两个容器内的元素的互换
+	swap(vec);		//将vec与本身的元素进行互换 
+*/
+
+void swap_Vector()
+{
+	vector<int> v1;
+	for(int i=0;i<100000;i++)
+	{
+		v1.push_back(i);
+	}
+	cout<<"v1的容量: "<<v1.capacity()<<endl;
+	cout<<"v1的大小："<<v1.size()<<endl;
+	
+	v1.resize(3);	
+	cout<<"v1的容量: "<<v1.capacity()<<endl;
+	cout<<"v1的大小："<<v1.size()<<endl;	
+	
+	//收缩内存
+	vector<int> (v1).swap(v1);
+	cout<<"v1的容量: "<<v1.capacity()<<endl;
+	cout<<"v1的大小："<<v1.size()<<endl;
+}
+
+/*
+	Vector预留空间:减小vector在动态扩展容量时扩展次数
+	reserve(int len);		//容量预留len个元素长度，预留位置不初始化，元素不可访问  
+*/
+
+void reserve_Vector()
+{
+	vector<int> v1;
+	v1.reserve(11);
+	for(int i=0;i<10;i++)
+	{
+		v1.push_back(i);
+	}
 }
 
 int main()
 {
-	test01();
+	//init_vector();
+	//assgin_Vector();
+	//size_Vector();
+	//insert_Vector();
+	//at_Vector();
+	//swap_Vector();
+	//reserve_Vector();	
 	return 0;
 }
