@@ -1,0 +1,62 @@
+#include<iostream>
+#include<queue>
+#include<string>
+using namespace std;
+
+/*
+	Queue(先进先出)构造函数：
+	queue<T> que;	//queue才用模板类实现，queue对象的默认构造形式(元素类型) 
+
+	赋值操作：
+	queue& operator=(const queue &que);		//重载等号操作符
+	
+	数据存取：
+	push(elem);			//往队尾添加元素 
+	pop();				//从对头移除第一个元素 
+	back();				//返回最后一个元素 
+	front();			//返回对头元素 
+	empty();			//判断队列是否为空 
+	size();				//返回队列大小 
+*/
+
+class Person 
+{
+public:
+	Person(string name,int age)
+	{
+		this->m_Name=name;
+		this->m_Age=age;
+	}					
+	string m_Name;
+	int m_Age;
+};
+
+void Queue()
+{
+	queue<Person> q;
+	
+	Person p1("唐僧",30);	
+	Person p2("孙悟空",130);	
+	Person p3("猪八戒",230);	
+	Person p4("沙和尚",330);
+	
+	q.push(p1);	
+	q.push(p2);	
+	q.push(p3);	
+	q.push(p4);
+	//队列不提供迭代器，并不支持随机访问 
+	while(!q.empty())	
+	{
+		cout<<"队头元素：姓名："<<q.front().m_Name<<"年龄："<<q.front().m_Age<<endl;
+		cout<<"队尾元素：姓名："<<q.back().m_Name<<"年龄："<<q.back().m_Age<<endl;
+		cout<<"队列大小："<<q.size()<<endl; 
+		q.pop();
+	}
+}
+
+int main()
+{
+	Queue();
+	return 0;
+}
+
