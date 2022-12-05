@@ -1,0 +1,42 @@
+#include<stdio.h>
+
+int main()
+{
+	char c;
+	while  ((c  =  getchar())  !=  EOF)  
+	{
+		if(c=='/')
+		{
+			char d=getchar();
+			if(d=='/')
+			{
+				while((d  =  getchar()) != '\n')
+				{
+					;
+				}
+				printf("%c",d);
+			}
+			else if(d=='*')
+			{
+				c=getchar();
+				while((d  =  getchar()))
+				{
+					if(c=='*' && d=='/')
+					{
+						break;
+					}
+					c=d;
+				}
+			}
+			else
+			{
+				printf("%c%c",c,d);
+			}
+		}
+		else
+		{
+			printf("%c",c);
+		}
+	}
+	return 0;
+}
