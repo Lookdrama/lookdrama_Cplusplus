@@ -1,0 +1,90 @@
+#include<iostream>
+#include<list>
+#include<string>
+using namespace std;
+
+/*
+	List(链表)构造函数：
+	list<T> lst; 				//list采用模板类实现对象的默认构造形式：
+	list(beg,end); 				//构造函数将[beg, end)区间中的元素拷贝给本身。
+	list(n,elem); 				//构造函数将n个elem拷贝给本身。
+	list(const list &lst); 		//拷贝构造函数。
+	
+	注：插入和删除功能跟vector基本一致 
+	
+	list数据存取： 
+	back();				//返回最后一个元素 
+	front();			//返回第一个元素 
+	
+	list反转和排序:
+	reverse();		//反转链表
+	sort();			//链表排序 
+*/
+
+/*
+	排序案例：
+	案列描述：将Person自定义数据类型进行排序，Person中属性有姓名、年龄、身高
+	排序规则：按照年龄进行升序，如果年龄相同按照身高进行降序 
+*/
+
+class Person 
+{
+public:
+	Person(string name,int age,int height)
+	{
+		m_Name=name;
+		m_Age=age;
+		m_Height=height;
+	}
+	string m_Name;
+	int m_Age;
+	int m_Height;
+};
+
+void Print_List(list<Person>& l)
+{
+	for(list<Person>::iterator it=l.begin();it!=l.end();it++)
+	{
+		cout<<"姓名："<<it->m_Name<<" 年龄："<<it->m_Age<<" 身高："<<it->m_Height<<endl;
+	}		
+}
+
+bool ComparePerson(Person& p1,Person& p2)
+{
+	if(p1.m_Age==p2.m_Age)
+	{
+		return p1.m_Height>p2.m_Height;
+	}
+	else
+	{
+		return p1.m_Age<p2.m_Age;
+	}
+}
+
+void List_sort()
+{
+	list<Person> l;
+	Person p1("刘备",35,175);	
+	Person p2("曹操",45,180);	
+	Person p3("孙权",40,170);	
+	Person p4("赵云",25,190);	
+	Person p5("张飞",35,160);	
+	Person p6("关羽",35,200);
+	
+	l.push_back(p1);
+	l.push_back(p2);
+	l.push_back(p3);
+	l.push_back(p4);
+	l.push_back(p5);
+	l.push_back(p6);
+	Print_List(l);
+	cout<<"--------------------------------------------------------"<<endl;
+	l.sort(ComparePerson);
+	Print_List(l);
+}
+
+int main()
+{
+	List_sort();
+	return 0;
+}
