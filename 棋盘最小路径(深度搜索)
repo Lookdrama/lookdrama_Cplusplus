@@ -1,0 +1,67 @@
+#include<stdio.h>
+int occupy[101][101];
+int N,startX,startY,endX,endY;
+int count=10000;
+int next[4][2]={{0,1},{1,0},{0,-1},{-1,0}};
+char a[101][101];
+
+void dys(int x,int y,int step)
+{
+	int tx,ty;
+	for(int i=0;i<4;i++)			//东南西北四个方向
+	{
+		tx=x+next[i][0];			//下一步的行号
+		ty=y+next[i][1];			//下一步的列号
+		if(tx<0 || tx>=N || ty<0 ||ty>=N)		//判断是否超出棋盘 
+		{
+			continue;
+		}
+		if(!occupy[tx][ty] && a[tx][ty]!=a[x][y])			//判断是否可以走 
+		{
+			occupy[tx][ty]=1;		//占用下一步
+			dys(tx,ty,step+1);		 //从下一步开始做深度优先搜索
+			occupy[tx][ty]=0;		//解除占用
+		}
+		if(tx==endX && ty==endY)
+		{
+			if(count>step)
+			{
+				count=step;
+				return ;
+			}			
+		}
+	}
+}
+
+int main()
+{
+	scanf("%d",&N);
+	getchar();
+	for(int i=0;i<N;i++)			////输入雷区矩阵
+	{
+		for(int j=0;j<N;j++)
+		{
+			scanf("%c",&a[i][j]);
+			getchar();
+			if(a[i][j]=='A')		//记录起点位置 
+			{
+				startX=i;
+				startY=j;
+			}
+			if(a[i][j]=='B')		//记录终点位置 
+			{
+				endX=i;
+				endY=j;
+			}
+			occupy[i][j]=0;			//初始化访问数组
+		}	
+	}
+	occupy[startX][startY]=1;            //起点被占用
+	dys(startX,startY,1);				//从起点开始做深度优先搜索
+	if(count==10000)
+	{
+		count=-1;
+	}
+	printf("%d\n",count);
+	return 0;
+}
