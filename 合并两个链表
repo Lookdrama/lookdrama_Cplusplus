@@ -1,0 +1,47 @@
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+/**
+ * 
+ * @param pHead1 ListNode类 
+ * @param pHead2 ListNode类 
+ * @return ListNode类
+ */
+struct ListNode* Merge(struct ListNode* pHead1, struct ListNode* pHead2 ) {
+    // write code here
+    if(pHead1 == NULL)
+        return pHead2;
+    if(pHead2 == NULL)
+        return pHead1;
+    //创建虚拟头节点，虚拟头节点的next指向合并完成的链表
+    struct ListNode *dummyHead = (struct ListNode *)malloc(sizeof(struct ListNode));
+    //p节点指向排序过程中最后一个的节点，初始时指向虚拟头节点
+    struct ListNode *p = dummyHead;
+    
+    while(pHead1 != NULL && pHead2 != NULL)
+    {
+        if(pHead1->val < pHead2->val)
+        {
+            p->next = pHead1;
+            p=p->next;
+            pHead1 = pHead1->next;
+        }
+        else
+        {
+            p->next = pHead2;
+            p=p->next;
+            pHead2 = pHead2->next;
+        }
+    }
+    
+    if(pHead1 != NULL)
+        p->next = pHead1;
+    if(pHead2 != NULL)
+        p->next = pHead2;
+    
+    return dummyHead->next;
+}
