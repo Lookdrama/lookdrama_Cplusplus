@@ -1,0 +1,35 @@
+#include <stdbool.h>
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * }ListNode;
+ */
+
+/**
+ * 
+ * @param head ListNode类 
+ * @return bool布尔型
+ */
+bool hasCycle(struct ListNode* head ) {
+    // write code here
+    if(head==NULL || head->next==NULL)
+    {
+        return false;
+    }
+    struct ListNode* p1=head;
+    struct ListNode* p2=head;
+    while(1)
+    {
+        p1=p1->next;
+        p2=p2->next->next;
+        if(p1 == p2)
+        {
+            return true;
+        }
+        if(p2==NULL || p2->next==NULL)
+        {
+            return false;
+        }
+    }
+}
