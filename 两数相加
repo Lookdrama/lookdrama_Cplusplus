@@ -1,0 +1,32 @@
+/**
+ * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+ *
+ * 
+ * @param numbers int整型一维数组 
+ * @param numbersLen int numbers数组长度
+ * @param target int整型 
+ * @return int整型一维数组
+ * @return int* returnSize 返回数组行数
+ */
+int* twoSum(int* numbers, int numbersLen, int target, int* returnSize ) {
+   int* ret = (int*)malloc(sizeof(int)*2);  //为数组申请2个整型大小的空间
+    if(numbersLen == 0)   
+        return NULL;
+    *returnSize=2;  //控制返回数组中元素的个数为2
+    int i,j;
+    for(i=0;i <numbersLen - 1; i++)
+    {
+        if(numbers[i] - 10 > target)//可能会在后面被减掉10
+            continue;//跳过本次for，检查下一个元素
+        for(j = i+1; j<numbersLen; j++)
+        {   //从某个小于目标值的数的后一个数开始比较
+            if(numbers[i] + numbers[j] == target)
+            {
+                ret[0]=i+1;  //所求第一个加数的下标值
+                ret[1]=j+1;  //所求第二个加数的下标值
+                return ret;   //返回数组首地址
+            }
+        }
+    }
+    return ret;  
+}
