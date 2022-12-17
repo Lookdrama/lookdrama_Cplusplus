@@ -1,0 +1,37 @@
+
+/**
+ * 
+ * @param matrix int整型二维数组 the matrix
+ * @param matrixRowLen int matrix数组行数
+ * @param matrixColLen int* matrix数组列数
+ * @return int整型
+ */
+
+/*
+    1、为了节省空间，就不专门建二维数组存储路径和，而直接在原数组中记录，将每个位置的权值改为到该位置的最短路径。
+    2、先处理首行，每个位置只可能从左边来，route[0][i]=route[0][i]+route[0][i-1]，即从第二个位置开始均要加上前面位置的路径。
+    3、然后处理首列，每个位置只可能从上面走来，route[j][0]=rou[j][0]+route[j-1][0],即从第二个位置开始均要加上上面位置的路径。
+    4、最后双重循环处理每行其他位置，均为该位置的权值+min(上面，左边）。
+*/
+
+int minPathSum(int** matrix, int matrixRowLen, int* matrixColLen ) {
+    // write code here
+    int row=matrixRowLen;
+    int col=*matrixColLen;
+    for(int i=1;i<col;i++)      //处理首行
+    {   
+        matrix[0][i]=matrix[0][i-1]+matrix[0][i];
+    }
+    for(int i=1;i<row;i++)      //处理首列
+    {
+        matrix[i][0]=matrix[i-1][0]+matrix[i][0];
+    }
+    for(int i=1;i<row;i++)
+    {
+        for(int j=1;j<col;j++)
+        {
+            matrix[i][j]+=matrix[i-1][j]>matrix[i][j-1]?matrix[i][j-1]:matrix[i-1][j];
+        }
+    }
+    return matrix[row-1][col-1];
+}
