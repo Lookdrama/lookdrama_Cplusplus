@@ -1,0 +1,37 @@
+/**
+ * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+ *
+ * 
+ * @param target int整型 
+ * @param array int整型二维数组 
+ * @param arrayRowLen int array数组行数
+ * @param arrayColLen int* array数组列数
+ * @return bool布尔型
+ */
+bool Find(int target, int** array, int arrayRowLen, int* arrayColLen ) {
+    // write code here
+    if(array == NULL)
+    {
+        return false;
+    }
+    int irow=0;
+    int icol=*arrayColLen-1;
+    bool isFind=false;
+    while(icol>=0 && irow<arrayRowLen)
+    {
+        if(target == array[irow][icol])
+        {
+            isFind=true;
+            break;
+        }
+        else if(target <= array[irow][icol])
+        {
+            icol--;
+        }
+        else
+        {
+            irow++;
+        }
+    }
+    return isFind;
+}
