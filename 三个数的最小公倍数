@@ -1,0 +1,36 @@
+#include<stdio.h>
+
+int swap_min(int* n,int* m)
+{
+	int* temp;
+	if(n>m)
+	{
+		temp=n;
+		n=m;
+		m=temp;
+	}	
+}
+
+int min(int n,int m)
+{
+	int i=1;
+	swap_min(&n,&m);
+	while((n*i)%m)
+	{
+		i++;
+	}
+	return n*i;
+}
+
+int main()
+{
+	int n1,n2,n3;
+	scanf("%d%d%d",&n1,&n2,&n3);
+	swap_min(&n1,&n2);
+	swap_min(&n1,&n3);
+	swap_min(&n2,&n3);
+	int t1=min(n1,n2);
+	int t2=min(t1,n3);
+	printf("%d",t2);
+	return 0;
+}
