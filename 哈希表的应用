@@ -1,0 +1,35 @@
+#include<stdio.h>
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int hash[100000]={0};
+	int m=-1,n=-1;
+	int temp;
+	cin >> temp;
+	while(cin >> temp)
+	{
+		hash[temp]++;
+	}
+	int start;
+	for(start=0;start<100000;start++)
+	{
+		if(hash[start]!=0)
+			break;
+	}
+
+	for(int j=start;j<100000;j++)
+	{
+		if(hash[j]==0)
+			m=j;
+		if(hash[j]==2)
+			n=j;
+		if(m!=-1 &&  n!=-1)
+			break;
+	}
+
+	printf("%d %d",m,n);
+	return 0;
+}
