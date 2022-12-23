@@ -1,0 +1,31 @@
+/**
+ * 代码中的类名、方法名、参数名已经指定，请勿修改，直接返回方法规定的值即可
+ *
+ * 
+ * @param cost int整型一维数组 
+ * @param costLen int cost数组长度
+ * @return int整型
+ */
+
+int min(int a,int b)
+{
+    if(a>b)
+    {
+        return b;
+    }
+    return a;
+}
+
+int minCostClimbingStairs(int* cost, int costLen ) {
+    // write code here
+    if(costLen==0)
+        return cost[0];
+    int dp[costLen+1];
+    dp[0]=0;
+    dp[1]=0;
+    for(int i=2;i<=costLen;i++)
+    {
+        dp[i]=min(dp[i-1]+cost[i-1],dp[i-2]+cost[i-2]);
+    }
+    return dp[costLen];
+}
