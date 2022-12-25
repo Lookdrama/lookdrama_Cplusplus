@@ -1,0 +1,32 @@
+
+/**
+ * 
+ * @param array int整型一维数组 
+ * @param arrayLen int array数组长度
+ * @return int整型
+ */
+int FindGreatestSumOfSubArray(int* array, int arrayLen ) {
+    // write code here
+    int dp[arrayLen];
+    dp[0]=array[0];
+    for(int i=0;i<arrayLen;i++)
+    {
+        if(dp[i-1]+array[i]>array[i])
+        {
+            dp[i]=dp[i-1]+array[i];
+        }
+        else
+        {
+            dp[i]=array[i];
+        }
+    }
+    int max=dp[0];
+    for(int i=0;i<arrayLen;i++)
+    {
+        if(max<dp[i])
+        {
+            max=dp[i];
+        }
+    }
+    return max;
+}
