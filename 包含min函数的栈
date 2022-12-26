@@ -1,0 +1,29 @@
+static int stack[301];
+static int i = 0;
+static int min_num = 99999;  
+//假设的最小值，其实比栈中所有数都大，为的就是给机会找出栈中真正的最小值
+
+void push(int value ) {
+   stack[i++] = value;
+}
+
+void pop() {
+    stack[i--];
+}
+
+int top() {
+    int temp=stack[--i];    //在push操作时,i会先加多++
+    i++;
+    return temp;
+}
+
+int min() {
+    int min;  //这才是真正的最小值
+    for(int k = 0 ; k < i; k++)  //来嘛，一个个比较，看谁小
+        if(stack[k] < min_num)
+            min_num = stack[k];  //好，你更小，最小值让给你
+    min = min_num;   //正式接位最小值
+    min_num = 999999;   //min函数不止用一次，下次还得与假设的最小值开始比，所以要还原
+    return min;
+   }
+    
