@@ -1,0 +1,46 @@
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+/**
+ * 
+ * @param head ListNode类 the head
+ * @return bool布尔型
+ */
+bool isPail(struct ListNode* head ) 
+{
+    // write code here 
+    struct ListNode* fast=head;
+    struct ListNode* slow=head;
+    if(head->next==NULL || head==NULL)
+    {
+        return true;
+    }
+    while(fast!=NULL && fast->next!=NULL)
+    {
+        fast=fast->next->next;
+        slow=slow->next;
+    }
+    fast=slow->next;
+    slow->next=NULL;
+    while(fast!=NULL)
+    {
+        struct ListNode* temp=fast->next;
+        fast->next=slow;
+        slow=fast;
+        fast=temp;
+    }
+    while(head!=NULL && slow!=NULL)
+    {
+        if(head->val != slow->val)
+        {
+            return false;
+        }
+        head=head->next;
+        slow=slow->next;
+    }
+    return true;
+}
