@@ -1,0 +1,24 @@
+/**
+ * struct ListNode {
+ *	int val;
+ *	struct ListNode *next;
+ * };
+ */
+
+/**
+ * 
+ * @param pHead1 ListNode类 
+ * @param pHead2 ListNode类 
+ * @return ListNode类
+ */
+struct ListNode* FindFirstCommonNode(struct ListNode* pHead1, struct ListNode* pHead2 ) {
+    // write code here
+    struct ListNode* L1=pHead1;
+    struct ListNode* L2=pHead2;
+    while(L1 != L2)
+    {
+        L1=(L1==NULL)?pHead2:L1->next;
+        L2=(L2==NULL)?pHead1:L2->next;
+    }
+    return L1;
+}
