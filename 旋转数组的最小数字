@@ -1,0 +1,23 @@
+
+/**
+ * 
+ * @param rotateArray int整型一维数组 
+ * @param rotateArrayLen int rotateArray数组长度
+ * @return int整型
+ */
+int minNumberInRotateArray(int* arr, int arrSize) 
+{
+    int left = 0;
+    int right = arrSize - 1;
+    while(left < right)
+    {
+        int mid = (left + right) / 2;
+        if(arr[mid] < arr[right])
+            right = mid;
+        else if(arr[mid] > arr[right])
+            left = mid + 1;
+        else
+            right -= 1;
+    }
+    return arr[left];
+}
