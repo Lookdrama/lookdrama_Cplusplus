@@ -1,0 +1,33 @@
+#include<stdio.h>
+#include<string.h>
+
+void reverse(char*left, char* right)	//字符串逆序 
+{
+	while (left < right)
+	{
+		char tmp = *left;
+		*left = *right;
+		*right = tmp;
+		left++;
+		right--;
+	}
+}
+void left_move(char arr[], int k)
+{
+	int len = strlen(arr);
+	k %= len;
+	//逆序左
+	reverse(arr, arr+k-1);
+	//逆序右
+	reverse(arr+k, arr + len - 1);
+	//逆序整体
+	reverse(arr, arr +len-1);
+}
+
+int main()
+{
+	char a[]="abcde";
+	left_move(a,2);
+	printf("%s",a);
+	return 0;
+}
