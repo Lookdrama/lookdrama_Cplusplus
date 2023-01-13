@@ -1,0 +1,33 @@
+#include<stdio.h>
+
+int check_sys()
+{
+	union Un
+	{
+		int i;
+		char c;
+	}un;
+	un.i=1;
+	return un.c;
+}
+
+
+int main()
+{
+	/*
+		int a=1;//十六进制: 0x 00 00 00 01
+		地址:低----------------------->高
+		01 00 00 00 ------小端
+		00 00 00 01 ------大端 
+	*/
+	
+	if(check_sys()==1)
+	{
+		printf("小端\n");
+	}
+	else
+	{
+		printf("大端\n");
+	}
+	return 0;
+}
