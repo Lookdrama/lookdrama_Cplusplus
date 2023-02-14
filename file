@@ -1,0 +1,15 @@
+#include<stdio.h>
+
+int main()
+{
+	//打开文件 
+	FILE* pf=fopen("file.txt","r");
+	if(pf==NULL)
+	{
+		perror("fopen:");
+	}
+	//关闭文件
+	fclose(pf);
+	pf=NULL; 
+	return 0;
+}
