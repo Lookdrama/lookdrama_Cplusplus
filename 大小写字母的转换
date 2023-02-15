@@ -1,0 +1,9 @@
+#include<stdio.h>
+int main(){
+	char a,b;
+	printf("请输入一个大写字母\n");
+	a=getchar();//getchar()函数以字符为单位对输入的数据进行读取  
+	b=a+32;//a+32是因为大小写字母在ASCII码中相差32 
+	putchar(b);//putchar()以字符输出 
+	return 0;
+}
