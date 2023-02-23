@@ -1,0 +1,19 @@
+/*
+	题目：去除重复的元素并保留一个，返回去除后数组的长度 
+*/
+int removeDuplicates(int* nums,int numSize)
+{
+	int src=1,dst=0;
+	while(src<numSize)
+	{
+		if(nums[src]!=nums[dst])
+		{
+			nums[++dst]=nums[src++];
+		}
+		else
+		{
+			src++;
+		}
+	}
+	return dst+1;
+}
