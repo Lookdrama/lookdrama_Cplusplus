@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+//Circle类
+class Circle
+{
+public:
+	//以下为Circle类成员函数
+	Circle(double r=0);		//构造函数用于初始化radius
+	double GetArea();			//计算圆的面积
+	void OutputArea();			//输出圆的面积到屏幕
+private:
+	//Circle类的数据成员
+	double radius;
+};
+
+//Circle类实现
+Circle::Circle(double r) { radius = r; }
+double Circle::GetArea() { return (3.14 * radius * radius); }
+void Circle::OutputArea() { cout << GetArea() << endl; }
+
+//Circle类的使用
+int main()
+{
+	Circle circle(3);		//创建半径为3的Circle类对象circle
+	circle.OutputArea();	//输出圆的面积
+	return 0;
+}
