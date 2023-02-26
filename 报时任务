@@ -1,0 +1,38 @@
+#include<stdio.h>
+
+
+
+int main()
+
+{
+	int h,m;
+	scanf("%d %d",&h,&m);
+	char str[25][15] = { "zero","one","two","three","four","five","six","seven","eight","nine",
+	"ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen",
+	"eighteen","nineteen","twenty","twenty one","twenty two","twenty three","twenty four" };
+	char b[6][10]={"0","0","twenty","thirty","forty","fifty"};
+	if(m==0)
+	{
+		printf("%s o'clock",str[h]);
+	}
+	else
+	{
+		printf("%s ",str[h]);
+		if(m<=24)
+		{
+			printf("%s ",str[m]);
+		}
+		else
+		{
+			if(m%10==0)	
+			{
+				printf("%s",b[m/10]);
+			}
+			else
+			{
+				printf("%s %s",b[m/10],str[m%10]);
+			}
+		}
+	}	
+	return 0;
+}
