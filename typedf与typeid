@@ -1,0 +1,26 @@
+#include<iostream>
+using namespace std;
+
+class ClassX	//定义类ClassX 
+{
+public:
+	void SetData(int r1,double r2)
+	{
+		a=r1;
+		b=r2;
+	}
+	int a;
+	double b;	
+};
+
+int main()
+{
+	double d=0.5;
+	ClassX A;
+	typedef ClassX* pClassX;	//建立ClassX类型的对象A 
+	pClassX p=&A;				//声明用pClassX表示ClassX* 
+	cout<<typeid(A).name()<<endl;		//输出A的数据类型 
+	cout<<typeid(*p).name()<<endl;		//输出*p的数据类型
+	cout<<typeid(d).name()<<endl;		//输出d的数据类型
+	return 0;
+}
