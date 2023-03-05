@@ -1,0 +1,17 @@
+//方法2：取节点头插到新链表
+ListNode* reverseList(ListNode* head)
+{
+	ListNode* cur=head,*newhead=NULL;
+	while(cur)
+	{
+		ListNode* next=cur->next;
+		
+		//头插
+		cur->next=newhead;
+		newhead=cur;
+		
+		
+		cur=next;
+	}
+	return newhead;
+}
