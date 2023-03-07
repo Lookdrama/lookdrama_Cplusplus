@@ -1,0 +1,49 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+/*
+	思路：将小于尾插到一个链表
+		  大于等于尾插到另一个链表
+		  然后再链接起来
+*/
+
+typedef struct ListNode{
+	int val;
+	struct ListNode* next;
+	ListNode(int x):val(x),next(NULL){}
+}ListNode;
+
+
+class Partition{
+public:
+	ListNode* partition(ListNode* pHead,int x)
+	{
+		ListNode* gGuard,*gTail,*lGuard,*lTail;
+		gGuard=gTail=(ListNode*)malloc(sizeof(ListNode));
+		lGuard=lTail=(ListNode*)malloc(sizeof(ListNode));
+		gTail->next=lTail->next=NULL;
+		ListNode* cur=pHead;
+		while(cur)
+		{
+			if(cur->val<x)
+			{
+				lTail->next=cur;
+				lTail=lTail->next;
+			}
+			else
+			{
+				gTail->next=cur;
+				gTail=gTail->next;	
+			}
+			cur=cur->next;
+		}
+		gTail->next=NULL;
+		lTail->next=gGuard->next;
+		
+		pHead=lGuard->next;
+		free(lGuard);
+		free(gGuard);
+		
+		return pHead; 
+	}
+};
