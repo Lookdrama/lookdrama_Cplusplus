@@ -1,0 +1,36 @@
+
+/*
+	思路：slow走的距离:slow=L+X
+		  fast走的距离:fast=L+n*C+X
+	因为 fast走的距离为slow的两倍
+	所以  L=n*C-X  
+	结论：一个指针从相遇点走，一个指针从起始点走，会从入口点相遇 
+*/
+
+typedef struct ListNode{
+	struct ListNode* next;
+	int val;
+}ListNode;
+
+ListNode* delteCycle(ListNode* head)
+{
+	ListNode* fast,*slow;
+	fast=slow=head;
+	while(fast && fast->next)
+	{
+		fast=fast->next->next;
+		slow=slow->next;
+		if(slow==fast)
+		{
+			ListNode* meet=slow;	//相遇点
+			ListNode* start=head;		//起始点
+			 
+			if(meet!=start)
+			{
+				meet=meet->next;
+				start=start->next; 
+			}
+			return meet;
+		}
+	}
+}
