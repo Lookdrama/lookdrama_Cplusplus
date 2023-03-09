@@ -1,0 +1,61 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+/*
+	解题思路：
+此题可以分三步进行：
+	1.拷贝链表的每一个节点，拷贝的节点先链接到被拷贝节点的后面
+	2.复制随机指针的链接：拷贝节点的随机指针指向被拷贝节点随机指针的下一个位置
+	3.拆解链表，把拷贝的链表从原链表中拆解出来
+*/
+
+typedef struct ListNode{
+	int val;
+	struct ListNode* next;
+	struct ListNode* random;
+}ListNode;
+
+ListNode* copyRandomList(ListNode* head)
+{
+	if(head == NULL)
+	{
+		return NULL;
+	}
+	//将链表拷贝每一个节点
+	for(ListNode* node=head;node!=NULL;node=node->next->next)
+	{
+		ListNode* newNode=(ListNode*)malloc(sizeof(ListNode));
+		newNode->val=node->val;
+		newNode->next=node->next;
+		node->next=newNode;
+	}
+	//将新节点的random赋初值
+	for(ListNode* node=head;node!=NULL;node=node->next->next)
+	{
+		ListNode* newNode=node->next;
+		if(node->random!=NULL)
+		{
+			newNode->random=node->random->next;
+		}
+		else
+		{
+			newNode->random=NULL;
+		}
+	}
+	ListNode* copyhead=head->next;
+	//将拷贝节点拿下来
+	for(ListNode* node=head;node!=NULL;node=node->next)
+	{
+		ListNode* newNode=node->next;
+		node->next=node->next->next;
+		if(newNode->next!=NULL)
+		{
+			newNode->next=newNode->next->next;
+		}
+		else
+		{
+			newNode->next=NULL;	
+		}
+	}
+	return copyhead;
+}
