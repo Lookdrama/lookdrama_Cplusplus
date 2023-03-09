@@ -1,0 +1,45 @@
+#include<iostream>
+using namespace std; 
+
+class A
+{
+public:
+	//在构造函数中初始化p,使其指向一个int对象
+	A(int r) 
+	{
+		p=new int(r);
+	}	
+	//在析构函数中释放p所指向的内存空间
+	~A()
+	{
+		delete p;
+	}		
+	//复制构造函数 
+	A(const A& r) 
+	{
+		p=new int(*r.p);
+	}
+	//赋值函数 
+	A& operator=(const A& r)
+	{
+		//如果是自引用，则返回当前对象 
+		if(this == &r)
+		{					
+			return *this;
+		}
+		delete p;		//否则先释放当前对象p所指向的内存 
+		p=new int(*r.p);		//使p指向新内存，用r.p所指内存的值初始化 
+		return *this;		 
+	} 
+private:
+	int* p;		//指针型数据成员	 
+};
+
+int main()
+{
+	A a(5);		//建立A类的对象a，将p指向的对象初始化为5
+	A b(5);		//建立对象b，调用复制初始化构造函数
+	A c(5),d(10);		//建立两个A类对象
+	d=c; 
+	return 0;
+}
