@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<math.h>
+
+/*
+	思路：s1:分别求两个链表的长度，比较最后一个节点的地址，看是否相交
+		  s2：长的链表先走 差距步
+		  s3：同时走，第一个地址相同就是交点
+*/
+
+typedef struct ListNode{
+	int val;
+	struct ListNode* next;
+}ListNode;
+
+ListNode* getIntersectionNode(ListNode* headA,ListNode* headB)
+{
+	ListNode* tailA=headA, *tailB=headB;
+	int lenA=1,lenB=1;
+	
+	while(tailA->next)
+	{
+		tailA=tailA->next;
+		lenA++;
+	}
+	
+	while(tailB->next)
+	{
+		tailB=tailB->next;
+		lenB++;
+	}
+	
+	if(tailA != tailB)		//比较节点的地址
+		return NULL;
+	
+	int gap=abs(lenA-lenB);
+	ListNode* longList=headA, *shortList=headB;
+	if(lenA < lenB)
+	{
+		longList=headB;
+		shortList=headA;
+	}
+	
+	while(gap--)
+	{
+		longList=longList->next;
+	}
+	
+	while(longList != shortList)
+	{
+		longList=longList->next;
+		shortList=shortList->next;
+	}
+	
+	return longList;
+}
