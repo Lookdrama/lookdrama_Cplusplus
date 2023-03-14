@@ -1,0 +1,27 @@
+#include<iostream>
+using namespace std;
+
+class Fib
+{
+public:
+	Fib():a0(1),a1(1) {}
+	int operator() ();		//重载声明，不要忘记前一个"()"
+private:
+	int a0,a1; 
+};
+
+int Fib::operator() ()		//函数定义写在 
+{
+	int temp=a0;
+	a0=a1;
+	a1=temp+a0;
+	return temp;
+}
+
+int main()
+{
+	Fib fib;		//声明类对象 
+	cout<<fib()<<endl;	//输出数列的第一个元素 
+	cout<<fib()<<endl;	//输出数列的第二个元素 
+	cout<<fib()<<endl;	//输出数列的第三个元素 
+}
