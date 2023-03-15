@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+
+class Increase{
+public:
+	Increase(int val=0)
+	{
+		value=val;
+	}
+	const Increase& operator++ ();		//prefix(前缀)
+	const Increase operator++ (int); 	//postfix(后缀)
+	void Show() const
+	{
+		cout<<value<<endl;
+	}
+private:
+	int value;	
+};
+
+const Increase& Increase::operator++()		//prefix
+{
+	++value;
+	return *this;
+}
+
+const Increase Increase::operator++(int)	//postfix
+{
+	Increase temp(*this);
+	value++;
+	return temp;
+}
+
+int main()
+{
+	Increase a(10),b(10),c;
+	c=++a;
+	cout<<"a: ";
+	a.Show();		//c=a.operator();
+	cout<<"c: ";
+	c.Show();
+	c=b++;		//c=b.operator++(10);
+	cout<<"b: ";
+	b.Show();
+	cout<<"c: ";
+	c.Show();	
+	return 0;
+}
