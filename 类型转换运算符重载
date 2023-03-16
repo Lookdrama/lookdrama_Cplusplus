@@ -1,0 +1,25 @@
+#include<iostream>
+using namespace std;
+
+class Complex{
+public:
+	Complex(double r=0,double i=0)
+	{
+		real=r;
+		image=i;
+	}
+	operator int()
+	{
+		return int(real);		//将对象有Complex->int 
+	}
+	
+private:
+	double real,image;
+};
+
+int main()
+{
+	Complex c(3.5,5.5);
+	cout<<int(c)<<endl;		//c.operator int(); 
+	return 0;
+}
