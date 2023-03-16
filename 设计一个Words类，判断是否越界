@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <string.h>
+using namespace std;
+class Words
+{
+public:
+	Words(char*s)
+	{
+		words=new char[strlen(s)+1];
+		strcpy(words,s);
+		len=strlen(s);
+	}
+	
+	char operator[](int cap)
+	{
+		if(cap>len-1)
+		{
+			cout<<"数组下标越界 "<<endl;
+			return 0;
+		}
+		else
+		{
+			cout<<"数组下标没有越界 ";
+			return *(words+cap);
+		}
+	}
+	
+	void Print()
+	{
+		cout<<words<<endl;
+	}
+	
+private:
+	char *words;
+	int len;
+};
+ 
+int main()
+{
+	Words array("GoodMorning");//类的构造函数
+	array.Print();
+	cout<<"Location 0: "<<array[0]<<endl;//判断下标为0是否越界
+	cout<<"Location 20: "<<array[20]<<endl;//判断下标为20是否越界
+}
