@@ -1,0 +1,38 @@
+#include<iostream>
+using namespace std;
+
+class recursion{
+public:
+	recursion(int num=0)
+	{
+		n=num;
+	}
+	
+	const recursion operator! ();
+	
+	void Show()
+	{
+		cout<<n<<endl;
+	}
+private:
+	int n; 
+};
+
+const recursion recursion::operator! ()
+{
+	int sum=1;
+	for(int i=1;i<=n;i++)
+	{
+		sum=sum*i;
+	}
+	return recursion(sum);
+}
+
+int main()
+{
+	recursion n1(3);
+	recursion n;
+	n=!n1;
+	n.Show();
+	return 0;
+}
