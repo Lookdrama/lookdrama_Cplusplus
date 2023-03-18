@@ -1,0 +1,63 @@
+#include<stdio.h>
+
+/*
+	思路：s1：找到中间节点
+		  s2：从中间节点开始，对后半段逆置
+		  s3：前半段和后半段进行比较
+*/
+
+typedef struct ListNode{
+	int val;
+	struct ListNode* next;
+}ListNode;
+
+class PalindromeList{
+public:
+	
+	//找到中间节点
+	ListNode* findMid(ListNode* head)
+	{
+		ListNode* slow,*fast;
+		slow=head;
+		fast=head;
+		while(fast->next)
+		{
+			slow=slow->next;
+			fast=fast->next->next;
+		}
+		return slow;
+	}
+	
+	//反转函数
+	ListNode* reverseList(ListNode* head)
+	{
+		ListNode* cur=head,*newhead=NULL;
+		while(cur)
+		{
+			ListNode* next=cur->next;
+			
+			//头插
+			cur->next=newhead;
+			newhead=cur;
+			
+			cur=next;
+		}
+		return newhead;
+	}
+		
+	bool chkPalindrome(ListNode* head)
+	{
+		ListNode* mid=findMid(head);
+		ListNode* rMid=reverseList(mid);
+		
+		while(rMid != NULL)
+		{
+			if(head->val != rMid->val)
+				return false;
+			head=head->next;
+			rMid=rMid->next;
+		}
+		
+		return true;
+	}
+};
