@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+
+typedef struct{
+	Queue q1;
+	Queue q2;
+}MyStack;
+
+//初始化栈 
+MyStack* myStackCreate()
+{
+	MyStack* pst=(MyStack*)malloc(sizeof(MyStack));
+	if(pst==NULL)
+	{
+		perror("malloc fail");
+		return NULL;
+	}	
+	
+	QueueInit(&pst->q1);
+	QueueInit(&pst->q2);
+	
+	return pst;
+}
+
+void PustStack(MyStack* obj,int x)
+{
+	if(!QueueEmpty(&obj->q1))
+	{
+		QueuePush(&obj->q1);
+	}
+	else
+	{
+		QueuePush(&obj->q2);
+	}
+} 
+
+void mystackPop(MyStack* obj)
+{
+	//判断哪个队列为空队列 
+	Queue* emptyQ=&obj->q1; 
+	Queue* nonemptyQ=&obj->q2;
+	if(!QueueEmpty(&obj->q1)) 
+	{
+		emptyQ=&obj->q2;
+		nonemptyQ=&obj->q1;
+	}
+	
+	while(QueueSize(nonemptyQ)>1)
+	{
+		QueuePush(emptyQ,QueuePop(nonemptyQ));
+	}
+	int top=Queuepop(nonemptyQ);
+	return top; 
+}
+
+int myStackTop(MyStack* obj)
+{
+	//判断哪个队列为空队列 
+	Queue* emptyQ=&obj->q1; 
+	Queue* nonemptyQ=&obj->q2;
+	if(!QueueEmpty(&obj->q1)) 
+	{
+		emptyQ=&obj->q2;
+		nonemptyQ=&obj->q1;
+	}
+	
+	while(QueueSize(nonemptyQ)>1)
+	{
+		QueuePush(emptyQ,QueueBack(nonemptyQ));
+	}
+	int top=QueueBack(nonemptyQ);
+	return top; 	
+}
+
+void mystackEmpty(MyStack* obj)
+{
+	return QueueEmpty(&obj->q1)&&QueueEmpty(&obj->q2);
+} 
+
+void myStackFree(MyStack* obj)
+{
+	QueueDestory(&obj->q1);
+	QueueDestory(&obj->q2);
+	free(obj);
+}
