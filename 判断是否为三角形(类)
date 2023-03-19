@@ -1,0 +1,67 @@
+#include<iostream>
+#include<cmath>
+#include<complex>
+using namespace std;
+
+class Triangle{
+public:
+	Triangle(double X,double Y,double Z)
+	{
+		x=X;
+		y=Y;
+		z=Z;
+	}
+	
+	int IsTrig()
+	{
+		if(x+y>z && x-y<z)
+		{
+			return 1;		//构成三角形 
+		}
+		else
+		{
+			return 0;		//不能构成三角形 
+		}
+	}
+	
+	friend double SumArea(Triangle& tri1,Triangle& tri2)	//友元函数
+	{
+		if(tri1.Area()!=-1 && tri2.Area()!=-1)
+		{
+			return tri1.Area()+tri2.Area();	
+		}
+		else if(tri1.Area()==-1)
+		{
+			cout<<"第一个三边不能构成一个三角形"<<endl; 
+			return -1;
+		}
+		else
+		{
+			cout<<"第二个三边不能构成一个三角形"<<endl;
+			return -1;
+		}
+	}
+	
+private:
+	double x,y,z;
+	double Area()
+	{
+		if(IsTrig())
+		{
+			double p=(x+y+z)/2;
+			return sqrt(p*(p-x)*(p-y)*(p-z));			
+		}
+		else
+		{
+			return -1;			//不构成三角形;
+		}
+	}
+};
+
+int main()
+{
+	Triangle tri1(3,4,5);
+	Triangle tri2(5,12,13);	
+	cout<<"两个三角形面积之和为(输出为-1时不构成三角形)："<<endl<<SumArea(tri1,tri2)<<endl;
+	return 0;
+}
