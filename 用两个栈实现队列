@@ -1,0 +1,52 @@
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
+
+typedef struct{
+	Stack pushS;
+	Stack popS;	
+}MyQueue;
+
+MyQueue* myQueueCreate()
+{
+	MyQueue* obj=(MyQueue*)malloc(sizeof(MyQueue));
+	if(obj==NULL)
+	{
+		perror("malloc fail");
+		return NULL; 
+	}	
+	StackInit(&obj->pushS);
+	StackInit(&obj->popS);
+	return obj;
+}
+
+void myQueuePush(MyQueue* obj,int x)
+{
+	StackPush(&obj->pushS,x);
+}
+
+int myQueuePop(MyQueue* obj)
+{
+	//pop队列为空,导数据 
+	if(StackEmpty(&obj->popS))
+	{
+		while(!StackEmpty(&obj->pushS))
+		{
+			StackPush(&obj->popS,StackPop(&obj->pushS));
+		}
+	}
+	int front=Stacktop(&obj->popS);
+	return front;
+}
+
+int myQueueEmpty(MyQueue* obj)
+{
+	return StackEmpty(&obj->pushS)&&StackEmpty(&obj->popS);
+}
+
+void myQueueFree(MyQueue* obj)
+{
+	StackDestory(&obj->popS);
+	StackDestory(&obj->pushS);
+	free(obj);
+}
