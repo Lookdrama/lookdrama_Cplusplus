@@ -1,0 +1,142 @@
+#include"heap.h"
+
+HP* HeaPinit(int k)
+{
+	HP* h1 = (HP*)malloc(sizeof(HP));
+	if (h1 == NULL)
+	{
+		perror("malloc error:");
+		return NULL;
+	}
+	h1->a = (HPDataType*)malloc(sizeof(HPDataType) * (k));
+	if (h1->a == NULL)
+	{
+		perror("malloc error:");
+		return NULL;
+	}
+	h1->capacity = k;
+	h1->size = 0;
+	return h1;
+}
+
+void Swap(HPDataType* t1, HPDataType* t2)
+{
+	HPDataType temp = *t1;
+	*t1 = *t2;
+	*t2 = temp;
+}
+
+void AdjustUP(HPDataType* a, int child)
+{
+	int parent = (child - 1) / 2;
+	while (child > 0)
+	{
+		if (a[child] > a[parent])
+		{
+			Swap(&a[child],&a[parent]);
+			child = parent;
+			parent = (child - 1) / 2;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void AdjustDownMin(HPDataType* a, int n, int parent)
+{
+	int child = parent * 2 + 1;
+	while (child < n)
+	{
+		if (child + 1 < n && a[child + 1] > a[child])
+		{
+			child++;
+		}
+
+		if (a[child] < a[parent])
+		{
+			Swap(&a[child], &a[parent]);
+			parent = child;
+			child = parent * 2 + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void AdjustDown(HPDataType* a, int n, int parent)
+{
+	int child = parent * 2 + 1;
+	while (child < n)
+	{
+		if (child + 1 < n && a[child + 1] > a[child])
+		{
+			child++;
+		}
+
+		if (a[child] > a[parent])
+		{
+			Swap(&a[child], &a[parent]);
+			parent = child;
+			child = parent * 2 + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+void HeapPush(HP* php, HPDataType x)
+{
+	assert(php);
+
+	if (php->size == php->capacity)
+	{
+		HPDataType* tmp = (HPDataType*)realloc(php->a, sizeof(HPDataType) * (php->capacity * 2));
+		if (tmp == NULL)
+		{
+			perror("realloc error:");
+			return;
+		}
+		php->capacity *= 2;
+		php->a = tmp;
+	}
+	php->a[php->size] = x;
+	AdjustUP(php->a, php->size);
+	php->size++;
+}
+
+HPDataType HeapPop(HP* php)
+{
+	assert(php);
+	assert(HeapEmpty);
+	//删除数据
+	Swap(&php->a[0], &php->a[php->size]);
+	int temp = php->a[php->size];
+	php->size--;
+
+	//向下调整
+	AdjustDown(php->a, php->size, 0);
+	return temp;
+}
+
+HPDataType HeapTop(HP* php)
+{
+	return php->a[php->size];
+}
+
+bool HeapEmpty(HP* php)
+{
+	assert(php);
+	return php->size == 0;
+}
+
+int HeapSize(HP* php)
+{
+	assert(php);
+	return php->size;
+}
