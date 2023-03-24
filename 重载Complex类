@@ -1,0 +1,138 @@
+#include<iostream>
+#include<assert.h>
+using namespace std;
+
+class Complex{
+public:
+	Complex(double r=0,double i=0)
+	{
+		real=r;
+		image=i;
+	}
+	
+	//一元取负运算符
+	const Complex operator- ();				
+		 
+	//用友元函数来二元函数的声明 
+	friend const Complex operator- (const Complex& c1,const Complex& c2);
+	friend const Complex operator+ (const Complex& c1,const Complex& c2);
+	friend const Complex operator* (const Complex& c1,const Complex& c2);
+	friend const Complex operator/ (const Complex& c1,const Complex& c2);
+ 
+ 	//复合赋值运算
+	Complex& operator+= (const Complex& c);
+	Complex& operator-= (const Complex& c);
+	Complex& operator*= (const Complex& c);
+	Complex& operator/= (const Complex& c);
+	
+	//复数的插入和提取 
+    friend istream& operator>>(istream& in, Complex& A);
+    friend ostream& operator<<(ostream& out, Complex& A);	
+private:
+	double real,image; 
+};
+
+const Complex Complex::operator- ()
+{
+	return Complex(-real,-image);
+}
+
+const Complex operator- (const Complex& c1,const Complex& c2)
+{
+	double r=c1.real-c2.real;
+	double i=c1.image-c2.image;
+	return Complex(r,i);	
+}
+
+const Complex operator+ (const Complex& c1,const Complex& c2)
+{
+	double r=c1.real+c2.real;
+	double i=c1.image+c2.image;
+	return Complex(r,i);	
+}
+
+const Complex operator *(const Complex& c1,const Complex& c2)
+{
+	double r=c1.real*c2.real - c1.image*c2.image;
+	double i=c1.image*c2.real + c1.real*c2.image;
+	return Complex(r,i);	
+}
+
+const Complex operator/ (const Complex& c1,const Complex& c2)
+{
+	assert(c2.image!=0 || c2.real!=0);
+	double r,i;
+	double square = c2.real*c2.real+c2.image*c2.image;
+	r=(c1.real*c2.real + c1.image*c2.image)/square;
+	i=(c1.image*c2.real - c1.real*c2.image)/square;
+	return Complex(r,i);	
+}
+
+Complex& Complex::operator+= (const Complex& c)
+{
+	real=real+c.real;
+	image=image+c.image;
+	return *this;
+}
+
+Complex& Complex::operator-= (const Complex& c)
+{
+	real=real-c.real;
+	image=image-c.image;
+	return *this;
+}
+
+Complex& Complex::operator*= (const Complex& c)
+{
+	double temp=real;
+	real=real*c.real - image*c.image;
+	image=image*c.real +temp*c.image;
+	return *this;
+}
+
+Complex& Complex::operator/= (const Complex& c)
+{
+	assert(c.image!=0 || c.real!=0);
+	double square = c.real*c.real+c.image*c.image;
+	double temp=real;
+	real=(real*c.real + image*c.image)/square;
+	image=(image*c.real - temp*c.image)/square;
+	return *this;
+}
+
+//重载输入运算符
+istream& operator>>(istream& in, Complex& C) 
+{
+    in >> C.real >> C.image;
+    return in;
+}
+//重载输出运算符
+ostream& operator<<(ostream& out, Complex& C) 
+{
+    out<<"("<<C.real<<","<<C.image <<")"<<endl;;
+    return out;
+}
+
+int main() {
+    Complex c1,c2(-1, -1),c3;	
+    cin>>c1;
+    cout<<c1<<endl;
+    cout<<c2 <<endl;
+    c3=c1-c2;
+    cout<<c3<<endl;
+    c3=c1+c2;
+    cout<<c3<<endl;
+    c3=c1*c2;
+    cout<<c3<<endl;
+    c3=c1/c2;
+    cout<<c3<<endl;
+    c1+=1;
+	cout<<c1<<endl; 
+	c1*=c2;
+	cout<<c1<<endl;
+	c1/=c3;
+	cout<<c1<<endl;
+	c1-=1;
+	cout<<c1<<endl;
+    return 0;
+}
