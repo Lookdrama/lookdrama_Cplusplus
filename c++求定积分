@@ -1,0 +1,46 @@
+#include<iostream>
+using namespace std;
+
+double f(double x)
+{
+	return 2*x;
+}
+
+class  defIntegral{
+public:
+	defIntegral(double x1,double x2,int N)
+	{
+		a=x1;
+		b=x2;
+		n=N;
+	}
+	
+	double work();
+private:
+	double a,b;		//[a,b],上下限 
+	int n;		//精度 
+};
+
+double defIntegral::work()
+{
+	double x=a;
+	double dx=(b-a)/n;		//沿x轴将面积分为n个小矩形，每个矩形宽为(b-a)/n 
+	double s,S;		//s表示每个小矩形的面积，S表示总面积 
+	for(int i=0;i<n;i++)
+	{
+		s=f(x+x+dx)*dx;		
+		S+=s;		//每个小矩形的面积叠加
+		x+=dx; 
+	} 
+	return S;
+}
+
+int main()
+{
+	cout<<"请输入上下限"<<endl;
+	double a,b;
+	cin>>a>>b;
+	defIntegral f1(a,b,1000);
+	cout<<f1.work();
+	return 0;
+} 
