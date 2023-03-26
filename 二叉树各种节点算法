@@ -1,0 +1,40 @@
+//树的节点个数
+int GetBTNodeNum(BTNode* root)	
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		return GetBTNodeNum(root->left) + GetBTNodeNum(root->right) + 1;
+	}
+}
+
+//树的高度
+int GetBTHight(BTNode* root)
+{
+	if (root == NULL)
+	{
+		return 0;
+	}
+	else
+	{
+		int leftHight = GetBTHight(root->left);
+		int rightHight = GetBTHight(root->right);
+		return leftHight > rightHight ? leftHight + 1 : rightHight + 1;
+	}
+}
+
+//第k层节点个数
+int BTreeKLevel(BTNode* root,int k)
+{
+	if (root == NULL)
+		return 0;
+	else if (k == 1)
+		return 1;
+	else
+	{
+		return BTreeKLevel(root->left,k-1) + BTreeKLevel(root->right,k-1);
+	}
+}
