@@ -1,0 +1,73 @@
+#include<iostream>
+using namespace std;
+
+//基类UnivPerson 
+class UnivPerson{
+public:
+	virtual void Show() const
+	{
+		cout<<"UnivPerson::Show()"<<endl;
+	}	
+	
+	virtual void Eat() const
+	{
+		cout<<"UnivPerson::Eat()"<<endl;
+	}
+	
+	virtual void Study() const
+	{
+		cout<<"UnivPerson::Study()"<<endl;
+	}
+	
+};
+
+//派生类Student
+class Student:public UnivPerson{
+public:
+	virtual void Show() const
+	{
+		cout<<"Student::Show()"<<endl;
+	}
+	
+	virtual void Eat() const
+	{
+		cout<<"Student::Eat()"<<endl;
+	}
+	
+	virtual void Study() const
+	{
+		cout<<"Student::Study()"<<endl;
+	}
+}; 
+
+//派生类Graduate
+class Graduate:public Student{
+public:
+	virtual void Show() const
+	{
+		cout<<"Graduate::Show()"<<endl;
+	}
+	
+	virtual void Eat()
+	{
+		cout<<"Graduate::Eat()"<<endl;
+	} 
+}; 
+
+
+int main()
+{
+	Graduate gra;		//建立派生类Graduate类对象
+	UnivPerson* p=&gra;		//基类指针，指向派生类对象
+	UnivPerson& rp=gra;		//基类引用，指向派生类对象
+	UnivPerson per=gra;		//基类对象，指向派生类对象
+	p->Show();			//Graduate::Show(),动态绑定 
+	rp.Show();			//Graduate::Show(),动态绑定
+	per.Show();			//UnivPerson::Show(),静态绑定
+	p->Study();		//Student::Study(),动态绑定,Graduate中没有重写Study() 
+	p->Eat();		//Student::Eat(),动态绑定,Graduate中Eat()不是虚函数重写
+	gra.Eat();		//Graduate::Eat(),静态绑定 
+	gra.Study();		//Student::Study(),静态绑定 
+	gra.Show();		//Graduate::Show(),静态绑定 
+	return 0;
+}
