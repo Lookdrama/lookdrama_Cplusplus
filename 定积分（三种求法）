@@ -1,0 +1,110 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+const double PI=3.14;
+
+double f(double x)
+{
+	return sin(x);
+
+}
+
+//基类Integral
+class Integral{
+public:
+	virtual double Integrate()=0;
+	
+	Integral(double a1=0,double b1=0,int num=0)
+	{
+		a=a1;
+		b=b1;
+		n=num;
+		step=(b-a)/n;
+		result=0;
+	}
+	
+	double result;
+	double a,b,step;
+	int n;
+};
+
+//矩形法类
+class RectIntegral:public Integral{
+public:
+	RectIntegral(double a1=0,double b1=0,int num=0):Integral(a1,b1,num){};
+	
+	double Integrate()
+	{
+		while(a<b)
+		{
+			result+=f(a)*step;
+			a+=step;
+		}
+		return result;
+	}
+};
+
+//梯形法类
+class LadIntegral:public Integral{
+public:
+	LadIntegral(double a1=0,double b1=0,int num=0):Integral(a1,b1,num){};
+	double Integrate()
+	{
+		for(int i=0;a<b;i++)
+		{
+			if(i==0)
+			{
+				result+=f(a)*(step/2);
+			}
+			else
+			{
+				result+=f(a)*step;
+			}
+			a+=step;
+		}		
+		result+=f(a)*(step/2);
+		return result;
+	}
+};
+
+//辛普生法类
+class SimpIntegral:public Integral{
+public:
+	SimpIntegral(double a1=0,double b1=0,int num=0):Integral(a1,b1,num){};
+	double Integrate()
+	{
+		for(int i=0;a<b;i++)
+		{
+			if(i==0)
+			{
+				result+=f(a)*(step/3);
+			}
+			else if(i%2!=0)
+			{
+				result+=4*f(a)*(step/3);
+			}
+			else
+			{
+				result+=2*f(a)*(step/3);
+			}
+			a+=step;
+		}
+		result+=f(a)*(step/3);
+		return result;
+	}
+};
+
+int main()
+{
+	SimpIntegral s1(0.0,PI/2,1000);
+	LadIntegral l1(0.0,PI/2,1000);
+	RectIntegral r1(0.0,PI/2,1000);
+	Integral* i1,*i2,*i3;
+	i1=&s1;
+	i2=&l1;
+	i3=&r1;
+	cout<<i1->Integrate()<<endl;
+	cout<<i2->Integrate()<<endl;
+	cout<<i3->Integrate()<<endl;
+	return 0;
+}
