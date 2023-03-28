@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<stdbool.h>
+
+typedef struct TreeNode{
+	int val;
+	struct TreeNode* left;
+	struct TreeNode* right;
+}TreeNode;
+
+bool isUnivalBTree(struct TreeNode* root)
+{
+	if(root==NULL)
+		return true;
+		
+	if(root->left && root->left->val != root->val)
+		return false;
+		
+	if(root->left && root->right->val != root->val)
+		return false;
+	
+	return isUnivalBTree(root->left) && isUnivalBTree(root->right);
+}
