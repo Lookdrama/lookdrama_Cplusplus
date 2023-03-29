@@ -1,0 +1,32 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct TreeNode{
+	int val;
+	struct TreeNode* left;
+	struct TreeNode* right;
+}TreeNode;
+
+int TreeSize(TreeNode* root)
+{
+	return root==NULL?0:TreeSize(root->left)+TreeSize(root->right);
+}
+
+void preorder(TreeNode* root,int* a,int* pi)
+{
+	if(root==NULL)	
+		return;
+	a[(*pi)++]=root->val;
+	preorder(root->left,a,pi);
+	preorder(root->right,a,pi);
+}
+
+int* preorderTraversal(TreeNode* root,int* returnSize)
+{
+	*returnSize=TreeSize(root);
+	int* a=(int*)malloc(*returnSize*sizeof(int));
+	
+	int i=0;
+	preorder(root,a,&i);
+	return a;
+}
