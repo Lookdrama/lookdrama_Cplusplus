@@ -1,0 +1,148 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+const double PI=3.14;
+
+class CPoint{
+public:
+	CPoint(double X,double Y)
+	{
+		x=X;
+		y=Y;
+	}
+	
+	CPoint(const CPoint& ret)
+	{
+		x=ret.x;
+		y=ret.y;
+	}
+	
+	double GetX()
+	{
+		return x;
+	}
+	
+	double GetY()
+	{
+		return y;
+	}
+	
+	void Show()
+	{
+		cout << "x=" << x << ' ' << "y=" << y << endl;
+	}
+private:
+	double x,y;
+};
+
+class Rectangle:public CPoint{
+public:
+	Rectangle(double X,double Y):CPoint(X,Y)
+	{
+		H=2*Y;
+		L=2*X;
+	}
+	
+	Rectangle(const Rectangle& ret):CPoint(ret.L/2,ret.H/2)
+	{
+		H=ret.H;
+		L=ret.L;
+	}
+	
+	double Area()
+	{
+		return L*H;
+	}
+	
+	void Position(CPoint& p1)
+	{
+		if(p1.GetX()<GetX()-L/2 || p1.GetX()>GetX()+L/2 || p1.GetY()<GetY()-H/2 || p1.GetY()>GetY()+H/2)
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在该矩形边外"<<endl;
+		}		
+		else if((p1.GetX()==GetX()-L/2 || p1.GetX()==GetX()+L/2) && (p1.GetY()==GetY()-H/2 || p1.GetY()==GetY()+H/2))
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在该矩形边上"<<endl;
+		}
+		else
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在该矩形边内"<<endl; 
+		}
+	}	
+private:
+	double H,L;
+};
+
+class Circle:public CPoint{
+public:
+	Circle(double x,double y,double r):CPoint(x,y)
+	{
+		radius=r;
+	}
+	
+	double GetR()
+	{
+		return radius;
+	}
+	
+	Circle(Circle& ret):CPoint(ret.GetX(),ret.GetY())
+	{
+		radius=ret.GetR();
+	}
+	
+	double Area()
+	{
+		return PI*radius*radius;
+	}
+	
+	void Position(CPoint& p1)
+	{
+		if(sqrt(((p1.GetX()-GetX())*(p1.GetX()-GetX()))+(p1.GetY()-GetY())*(p1.GetY()-GetY()))<radius)
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在圆内"<<endl;
+		}
+		else if(sqrt(((p1.GetX()-GetX())*(p1.GetX()-GetX()))+(p1.GetY()-GetY())*(p1.GetY()-GetY()))==radius)
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在圆上"<<endl;
+		}
+		else
+		{
+			cout<<"该点("<<p1.GetX()<<","<<p1.GetY()<<")在圆外"<<endl;
+		}
+	}
+private:
+	double radius;	
+};
+
+
+int main()
+{
+	Rectangle r1(4,3);
+	Circle c1(4,3,5);
+	CPoint p1(0,0);
+	r1.Position(p1);
+	c1.Position(p1);
+	
+	CPoint p2(8,6);
+	r1.Position(p2);
+	c1.Position(p2);
+	
+	CPoint p3(3,3);
+	r1.Position(p3);
+	c1.Position(p3);
+	
+	CPoint p4(-3,3);
+	r1.Position(p4);
+	c1.Position(p4);
+	
+	CPoint p5(8,4);
+	r1.Position(p5);
+	c1.Position(p5);
+	
+	CPoint p6(8,8);
+	r1.Position(p6);
+	c1.Position(p6);					
+	cout<<"该圆的面积: "<<c1.Area()<<endl;
+	cout<<"该矩形的面积: "<<r1.Area()<<endl;
+	return 0;
+}
