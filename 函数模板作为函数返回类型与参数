@@ -1,0 +1,68 @@
+#include<iostream>
+using namespace std;
+
+template<typename T>
+struct Data{
+	T max,min;
+	unsigned int mk,nk;
+};
+
+////函数模板作为函数返回类型 
+//template<typename T>
+//Data<T> MaxMin(T* s,int n)
+//{
+//	Data<T> r;
+//	r.max=r.min=s[0];
+//	r.mk=r.nk=0;
+//	for(int i=0;i<n;i++)
+//	{
+//		if(s[i]>r.max)
+//		{
+//			r.max=s[i];
+//			r.mk=i;
+//		}
+//		if(s[i]<r.min)
+//		{
+//			r.min=s[i];
+//			r.nk=i;
+//		}
+//	}
+//	return r;
+//}
+
+//函数模板作为参数类型之一
+template<typename T>
+void MaxMin(T* s,int n,Data<T>& r)
+{
+	r.max=r.min=s[0];
+	r.mk=r.nk=0;
+	for(int i=0;i<n;i++)
+	{
+		if(s[i]>r.max)
+		{
+			r.max=s[i];
+			r.mk=i;
+		}
+		if(s[i]<r.min)
+		{
+			r.min=s[i];
+			r.nk=i;
+		}
+	}
+} 
+
+int main()
+{
+	double a[]={1.1,2.2,3.3,4.4};
+	Data<double> d1;
+	MaxMin(a,4,d1);
+	cout<<"a 数组的最大值/最小值及它们的索引值:"<<endl;
+	cout<<d1.max<<","<<d1.min<<","<<d1.mk<<","<<d1.nk<<endl;
+	
+	int b[]={1,2,3,4};
+	Data<int> d2;
+	MaxMin(b,4,d2);
+	cout<<"b 数组的最大值/最小值及它们的索引值:"<<endl;
+	cout<<d2.max<<","<<d2.min<<","<<d2.mk<<","<<d2.nk<<endl;		
+	return 0;
+}
