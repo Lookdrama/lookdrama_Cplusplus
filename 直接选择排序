@@ -1,0 +1,55 @@
+#include<stdio.h>
+
+void Swap(int* p1,int* p2)
+{
+	int temp=*p1;
+	*p1=*p2;
+	*p2=temp;
+}
+
+//一次选两个数(最大值，最小值)
+//时间复杂度：O(N^2)  (最好，最坏的情况都是一样) 
+void SelectSort(int* a,int n)
+{
+	int left=0,right=n-1;
+	while(left<right)
+	{
+		int mini=left,maxi=left;		//最小值，最大值的下标 
+		for(int i=left+1;i<=right;i++)
+		{
+			if(a[i]<a[mini])
+			{
+				mini=i;
+			}
+			if(a[i]>a[maxi])
+			{
+				maxi=i;
+			} 
+		}	
+		Swap(&a[left],&a[mini]);
+		//如果left与maxi进行重叠，交换后修正一下 
+		if(left==maxi)
+		{
+			maxi=mini;
+		}
+		Swap(&a[right],&a[maxi]);
+		
+		++left;
+		--right;	
+	}	
+}
+
+void PrintArray(int* a,int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		printf("%d ",a[i]);
+	}
+}
+
+int main()
+{
+	int a[5]={2,1,5,6,8};
+	SelectSort(a,5);
+	PrintArray(a,5); 
+}
