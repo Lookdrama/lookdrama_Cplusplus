@@ -1,0 +1,176 @@
+/*
+	快速排序的基本思想:
+	通过一趟排序将待排序记录分割独立的两个部分，
+	其中一个部分记录的关键字均比另一部分记录的关键字小，
+	则可分别对这两部分记录继续进行排序，以达到整个序列有序的目的 
+*/
+
+#include<stdio.h>
+
+void Swap(int* p1,int* p2)
+{
+	int temp=*p1;
+	*p1=*p2;
+	*p2=temp;
+}
+
+int GetMid(int* a,int left,int right)
+{
+	int mid=(left+right)/2;
+	if(a[left]>a[right])
+	{
+		if(a[mid]<a[right])
+		{
+			return right;
+		}
+		else if(a[mid]>a[left])
+		{
+			return left;
+		}
+		else
+		{
+			return mid;
+		}
+	} 
+	else	//a[left]<a[right]
+	{
+		if(a[mid]<a[left])
+		{
+			return left;
+		}
+		else if(a[mid]>a[right])
+		{
+			return right;
+		}
+		else
+		{
+			return mid;
+		}
+	}
+}
+
+void printArray(int arr[],int length)
+{
+	for(int i=0;i<length;i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	printf("\n");
+}
+
+
+////划分区域 
+int partition1(int arr[],int start,int end)
+{
+	int temp=arr[start];	//关键字进行划分 
+	while(start<end)
+	{
+		//从后往前扫 
+		while(start<end && arr[end]>=temp)
+		{
+			end--;
+		}
+		if(start<end)
+		{
+			arr[start]=arr[end];
+			start++;
+		}
+		//从前往后扫 
+		while(start<end && arr[start]<=temp)
+		{
+			start++;
+		}
+		if(start<end)
+		{
+			arr[end]=arr[start];
+			end--;
+		}
+	}
+	arr[start]=temp;
+	return start;
+}
+
+//挖坑法 
+int partition2(int* a,int left,int right)
+{
+	int mid=GetMid(a,left,right);
+	if(mid!=left)
+	{
+		Swap(&a[mid],&a[left]);
+	}
+	int hole=left;
+	int key=a[left];
+	while(left<right)
+	{
+		//右边找小
+		while(left<right && a[right]>=key)
+		{
+			--right;
+		} 
+		a[hole]=a[right];
+		hole=right;
+		
+		//左边找大
+		while(left<right && a[left]<=key)
+		{
+			left++;
+		} 
+		a[hole]=a[left];
+		hole=left;
+	}		
+	a[hole]=key;
+	return hole;
+}
+
+//前后指针法
+/*
+	1.cur找到比key小的值，++prev，cur和prev位置的值交换，++cur
+	2.cur找到比key大的值，++cur 
+*/
+int partition3(int* a,int left,int right)
+{
+	int mid=GetMid(a,left,right);
+	if(mid!=left)
+	{
+		Swap(&a[mid],&a[left]);
+	}
+	int key=a[left];
+	int prev=left,cur=left+1;
+	while(cur<=right)
+	{
+		if(key>a[cur])
+		{
+			++prev;
+			Swap(&a[cur],&a[prev]); 
+			++cur;
+		}
+		else
+		{
+			cur++;
+		}
+	}
+	Swap(&a[left],&a[prev]);
+	return prev;
+}
+
+//快速排序 
+void qucikSort(int arr[],int start,int end)
+{
+	if(start<end)
+	{
+//		int index=partition1(arr,start,end);
+//		int index=partition2(arr,start,end);
+		int index=partition3(arr,start,end);
+		qucikSort(arr,start,index-1);
+		qucikSort(arr,index+1,end);
+
+	}
+}
+
+int main()
+{
+	int arr[]={40,7,12,34,50,91,75,65,25,25};
+	qucikSort(arr,0,9);
+	printArray(arr,10); 
+	return 0;
+}
