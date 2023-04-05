@@ -1,0 +1,154 @@
+#include<iostream>
+using namespace std;
+
+template<typename T>
+struct ListNode{
+	T val;
+	ListNode<T>* next;	
+};
+
+template<typename T>
+class List
+{
+public:
+
+	List()
+	{
+		head=new ListNode<T>;
+		if(head == NULL)
+		{
+			perror("动态开辟内存失败");
+		}
+		head->next=NULL;		
+	} 
+	
+	ListNode<T>* CreateNode(ListNode<T>* p,T data)
+	{
+		p=new ListNode<T>;
+		if(head == NULL)
+		{
+			perror("动态开辟内存失败");
+		}		
+		p->val=data;
+		p->next=NULL;
+		return p;
+	}
+	
+	void CreateList(int n)
+	{
+		ListNode<T>* node=head;
+		cout<<"请输入链表中元素"<<endl;
+		while(n--)
+		{
+			T data;
+			cin>>data;
+			ListNode<T>* temp=CreateNode(temp,data);
+			node->next=temp;
+			node=temp;
+		}
+	}	
+	
+	int GetListLength() const
+	{
+		ListNode<T>* node=head->next;
+		int count=0;
+		while(node)
+		{
+			node=node->next;
+			count++;
+		} 
+		return count;
+	}
+	
+	bool Is_Empty() const
+	{
+		if(head->next==NULL)
+			return true;
+		else
+			return false;
+	}
+	
+	void ListInsert(T data,int index) 
+	{
+		ListNode<T>* node=head->next;
+		if(GetListLength()<index)
+		{
+			perror("插入位置大于当前链表长度");
+		}
+		for(int i=0;i<index;i++)
+		{
+			node=node->next;
+		}
+		ListNode<T>* temp=CreateNode(temp,data);
+		temp->next=node->next;
+		node->next=temp;
+	}
+	
+	T ListDelete(int n)
+	{
+		if(Is_Empty())
+		{
+			perror("链表为空，无法进行删除操作");
+		}
+		ListNode<T>* node=head->next;
+		for(int i=0;i<n-1;i++)
+		{
+			node=node->next;
+		}
+		T data=node->next->val;
+		node->next=node->next->next;
+		return data;
+	}
+	
+	T GetElem(int n) const
+	{
+		if(Is_Empty())
+		{
+			perror("链表为空，无法进行提取操作");
+		}
+		if(n>GetListLength())
+		{
+			perror("提取元素索引值超过链表长度"); 
+		}
+		ListNode<T>* node=head->next;
+		for(int i=0;i<n;i++)
+		{
+			node=node->next;
+		}
+		return node->val;
+	}
+	
+	void Show()
+	{
+		for(ListNode<T>* start = head->next; start != NULL; start = start->next) 
+		{
+		   	cout<<start->val<<" ";
+		}
+		cout<<endl;
+	}	
+
+private:
+	ListNode<T>* head; 
+};
+
+int main()
+{
+	List<int> List1;
+	List1.CreateList(5);
+	List1.Show();
+	List1.ListInsert(2,3);
+	List1.Show();
+	List1.ListDelete(2);
+	List1.Show();
+	List1.GetElem(4);
+	
+	List<double> List2;
+	List2.CreateList(5);
+	List2.Show();
+	List2.ListInsert(2,3);
+	List2.Show();
+	List2.ListDelete(2.2);
+	List2.Show();
+	List2.GetElem(4);	
+	return 0;
+}
