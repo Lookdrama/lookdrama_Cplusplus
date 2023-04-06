@@ -1,0 +1,44 @@
+#include<iostream>
+using namespace std;
+
+template<typename T>
+void BubbleSort(T* s,int len)
+{
+	for(int i=0;i<len-1;i++)
+	{
+		for(int j=0;j<len-i-1;j++)
+		{
+			if(s[j]>s[j+1])
+			{
+				T temp=s[j];
+				s[j]=s[j+1];
+				s[j+1]=temp;
+			}
+		}
+	}
+} 
+
+template<typename T>
+void PrintArray(T* a,int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		cout<<a[i]<<" ";
+	}
+}
+
+int main()
+{
+	double a1[]={1.1,3.3,2.2,7.7,5.5};
+	int len1=sizeof(a1)/sizeof(a1[0]);	
+	BubbleSort(a1,len1);
+	PrintArray(a1,len1);
+	
+	cout<<endl;
+	
+	int a2[]={1,3,2,7,5};
+	int len2=sizeof(a2)/sizeof(a2[0]);
+	BubbleSort(a2,len2);
+	PrintArray(a2,len2);
+	return 0;
+}
