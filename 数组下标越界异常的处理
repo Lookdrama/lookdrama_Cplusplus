@@ -1,0 +1,53 @@
+#include<iostream>
+#include<stdexcept>		//使用异常Out_of_range
+using namespace std;
+
+//定义数组类型模板
+template<typename T>
+class Array
+{
+public:	
+	Array(int a=5)		//默认数组含五个元素
+	{
+		size=a;
+		pelement=new T[size];
+	}
+	
+	~Array()
+	{
+		delete []pelement;
+	}
+	
+	T& operator[](int i)
+	{
+		//如果下标越界，就抛出异常Out_of_range
+		if(i<0 || i>=size)
+		{
+			throw out_of_range("Out_of_range error in Array");
+		}
+		return pelement[i];
+	}
+private:
+	int size;
+	T* pelement;
+};
+
+int main()
+{
+	Array<int> array(6);		//数组含六个元素
+	//希望吧0~7写入数组中，但当i=6时抛出越界信息
+	try
+	{
+		for(int i=0;i<8;i++)
+		{
+			array[i]=i;
+			cout<<array[i]<<" ";
+		}
+		cout<<endl;
+	}
+	catch(out_of_range& excep)
+	{
+		cerr<<excep.what()<<endl;
+	}
+	return 0;
+}
