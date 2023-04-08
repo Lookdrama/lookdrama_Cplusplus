@@ -1,0 +1,40 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+class FileExcep
+{
+public:
+	FileExcep():message("File not created!")
+	{
+		
+	}
+	const char* what() const
+	{
+		return message;
+	}
+private:
+	const char* message;
+};
+
+//主函数
+int main()
+{
+	ifstream infile("data.txt",ios::in);	//创建一个ifstream类型的对象
+	try
+	{
+		if(!infile)
+			throw FileExcep();		//如果读入失败，抛出异常 
+	} 
+	catch(FileExcep& fex)		//捕捉异常 
+	{
+		cout<<fex.what()<<endl;		//输出异常
+		exit(0);				//退出程序 
+	}
+	//从文件读入数据
+	char ch[50];	
+	infile.getline(ch,6);		//从文件中读入5个字符，存入ch中 
+	cout<<ch<<endl;
+	infile.close();				//关闭文件 
+	return 0; 
+} 
