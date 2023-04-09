@@ -1,11 +1,39 @@
+#include<stdio.h>
+
+/*
+	插入排序(是一种稳定排序):
+	步骤:
+		1.从第二个元素开始，去它跟之前的序列进行比较，找到合适的插入位置
+		2.移动元素，指针后移 
+*/
+
+void insertSort(int arr[],int length)
+{
+	 
+	for(int i=1;i<length;i++)	 //外层循环从第二个元素开始比较
+	{
+		for(int j=0;j<=i-1;j++) 	//比较从0 - 它们前一个元素之间有没有合适的位置插入
+		{
+			if(arr[i]<arr[j])
+			{
+				int temp=arr[i];
+				for(int k=i-1;k>=j;k--)
+				{
+					arr[k+1]=arr[k];
+				}
+				arr[j]=temp; 
+			}
+		}
+	}
+}
+
+
 /*
 	快速排序的基本思想:
 	通过一趟排序将待排序记录分割独立的两个部分，
 	其中一个部分记录的关键字均比另一部分记录的关键字小，
 	则可分别对这两部分记录继续进行排序，以达到整个序列有序的目的 
 */
-
-#include<stdio.h>
 
 void Swap(int* p1,int* p2)
 {
@@ -158,11 +186,19 @@ void qucikSort(int arr[],int start,int end)
 {
 	if(start<end)
 	{
-//		int index=partition1(arr,start,end);
-//		int index=partition2(arr,start,end);
-		int index=partition3(arr,start,end);
-		qucikSort(arr,start,index-1);
-		qucikSort(arr,index+1,end);
+		//小区间优化---直接使用插入排序
+		if((start-end+1)>10)
+		{
+//			int index=partition1(arr,start,end);
+//			int index=partition2(arr,start,end);
+			int index=partition3(arr,start,end);
+			qucikSort(arr,start,index-1);
+			qucikSort(arr,index+1,end);		
+		}
+		else
+		{
+			insertSort(arr+start,end-start+1);
+		}
 
 	}
 }
