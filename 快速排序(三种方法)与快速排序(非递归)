@@ -1,6 +1,16 @@
 #include<stdio.h>
 
 /*
+	递归的问题：
+	1.效率(影响不是很大)
+	2.递归深度太深，会导致栈溢出
+	
+	递归改非递归：
+	1.直接改循环(斐波那契数列、n的阶乘)
+	2.用栈
+*/
+
+/*
 	插入排序(是一种稳定排序):
 	步骤:
 		1.从第二个元素开始，去它跟之前的序列进行比较，找到合适的插入位置
@@ -181,32 +191,61 @@ int partition3(int* a,int left,int right)
 	return prev;
 }
 
-//快速排序 
-void qucikSort(int arr[],int start,int end)
-{
-	if(start<end)
-	{
-		//小区间优化---直接使用插入排序
-		if((start-end+1)>10)
-		{
-//			int index=partition1(arr,start,end);
-//			int index=partition2(arr,start,end);
-			int index=partition3(arr,start,end);
-			qucikSort(arr,start,index-1);
-			qucikSort(arr,index+1,end);		
-		}
-		else
-		{
-			insertSort(arr+start,end-start+1);
-		}
+////快速排序(递归) 
+//void quickSort(int arr[],int start,int end)
+//{
+//	if(start<end)
+//	{
+////		int index=partition1(arr,start,end);
+////		int index=partition2(arr,start,end);
+//		int index=partition3(arr,start,end);
+//		qucikSort(arr,start,index-1);
+//		qucikSort(arr,index+1,end);		
+//
+//	}
+//}
 
+//快速排序(非递归)
+/*
+	1、栈里面去一段区间，单趟排序
+	2、单趟分割子区间入栈
+	3、子区间只有一个值或者不存在就不入栈
+*/
+void quickSortNonR(int* a,int left,int right)
+{
+	Stack st;
+	StackInit(&st);
+	StackPush(&st,right);
+	StackPush(&st,left);
+	
+	while(!StackEmpty(&st))
+	{
+		int begin=StackTop(&st);
+		StackPop(&st);
+		int end=StackTop(&st);
+		StackPop(&st);
+		
+		int keyi=partition3(a,begin,end);
+		//[begin,keyi-1] keyi [keyi+1,end]
+		if(keyi+1<end)
+		{
+			StackPush(&st,end);
+			StackPush(&st,keyi+1);
+		}
+		
+		if(keyi-1>begin)
+		{
+			StackPush(&st,keyi-1);
+			StackPush(&st,begin);			
+		}
 	}
+	StackDestroy(&st);
 }
 
 int main()
 {
 	int arr[]={40,7,12,34,50,91,75,65,25,25};
-	qucikSort(arr,0,9);
+	quickSortNonR(arr,0,9);
 	printArray(arr,10); 
 	return 0;
-}
+}	
