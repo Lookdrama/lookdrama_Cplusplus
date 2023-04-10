@@ -1,0 +1,122 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void printArray(int arr[],int length)
+{
+	for(int i=0;i<length;i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	printf("\n");
+}
+
+void _MergeSort(int* a,int begin,int end,int* temp)
+{
+	if(end<=begin)
+		return ;
+	
+	int mid=(begin+end)/2;
+	//分割左右区间:[begin,mid] [mid+1,end],子区间递归排序
+	_MergeSort(a,begin,mid,temp);	
+	_MergeSort(a,mid+1,end,temp);
+	
+	//[begin,mid] [mid+1,end]进行归并
+	int begin1=begin,end1=mid;
+	int begin2=mid+1,end2=end;
+	int i=begin;
+	while(begin1<=end1 && begin2<=end2)
+	{
+		if(a[begin1]<a[begin2])
+		{
+			temp[i++]=a[begin1++];
+		}
+		else
+		{
+			temp[i++]=a[begin2++];
+		}
+	}
+	//谁没结束谁往后走
+	while(begin1<=end1)
+	{
+		temp[i++]=a[begin1++];
+	}
+	while(begin2<=end2)
+	{
+		temp[i++]=a[begin2++];
+	}	
+	
+	//拷贝回原数组
+	memcpy(a+begin,temp+begin,sizeof(int)*(end-begin+1));
+}
+
+//归并递归
+void MergeSort(int* a,int n)
+{
+	int* temp=(int*)malloc(sizeof(int)*n);
+	if(temp==NULL)
+	{
+		perror("malloc fail\n");
+		return ;
+	}
+	_MergeSort(a,0,n-1,temp);
+	free(temp);
+}
+
+//归并非递归
+void MergeSortNonR(int* a,int n)
+{
+	int* temp=(int*)malloc(sizeof(int)*n);
+	if(temp==NULL)
+	{
+		perror("malloc fail\n");
+		return ;
+	}
+	
+	int gap=1;
+	while(gap<=n)
+	{
+		for(int i=0;i<n;i+=2*gap)
+		{
+			//分割左右区间:[begin,mid] [mid+1,end]
+			int begin1=i,end1=i+gap-1;
+			int begin2=i+gap,end2=i+2*gap-1;
+			int j=i;
+			while(begin1<=end1 && begin2<=end2)
+			{
+				if(a[begin1]<a[begin2])
+				{
+					temp[j++]=a[begin1++];
+				}
+				else
+				{
+					temp[j++]=a[begin2++];
+				}
+			}
+			//谁没结束谁往后走
+			while(begin1<=end1)
+			{
+				temp[j++]=a[begin1++];
+			}
+			while(begin2<=end2)
+			{
+				temp[j++]=a[begin2++];
+			}			
+		}	
+		
+		//拷贝
+		
+		gap*=2;		
+	}
+	free(temp);	
+}
+
+int main()
+{
+	int arr[]={40,7,12,34,50,91,75,65,25,25};
+//	MergeSort(arr,10);
+	MergeSortNonR(arr,10);
+	//quickSortNonR(arr,0,9);
+	printArray(arr,10); 
+	return 0;
+}
