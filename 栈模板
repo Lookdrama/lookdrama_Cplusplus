@@ -1,0 +1,52 @@
+#include<iostream>
+using namespace std;
+
+template<typename Type>
+class TStack
+{
+public:
+	TStack():top(0){};		//构造函数定义，栈顶位置初始化为0
+	void push(const Type& element);		//将元素element压入栈
+	Type pop();		//弹出元素
+	
+private:
+	enum{size =100};		//栈的大小
+	Type stack[size];		//存放栈元素的数组
+	int top;		//栈顶
+};
+
+//类模板的实现
+//注意：类模板的成员函数如果定义在类外，必须是函数模板的形式
+template<typename Type>
+void TStack<Type>::push(const Type& element)
+{
+	if(top==size)		//如果栈满，终止程序
+		exit(1);	
+	stack[top++]=element;		//否则将数据压入栈，栈顶位置加1
+}
+
+template<typename Type>
+Type TStack<Type>::pop()
+{
+	if(top==0)		//如果栈空，终止程序
+		exit(1);
+	return stack[--top];		//否则栈顶位置减一，弹出数据
+}
+
+int main()
+{
+	TStack<int>	is;		//建立栈对象is，Type-int
+	for(int i=0;i<10;i++)
+	{
+		is.push(i);			//向栈中压入整型数0~9
+	}
+	for(int i=0;i<10;i++)
+	{
+		cout<<is.pop()<<" ";
+	}
+	cout<<endl;
+	TStack<double> ds;
+	ds.push(3.14);
+	cout<<ds.pop()<<endl;
+	return 0;
+}
