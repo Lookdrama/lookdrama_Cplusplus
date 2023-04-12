@@ -63,8 +63,8 @@ void MergeSort(int* a,int n)
 	free(temp);
 }
 
-//归并非递归
-void MergeSortNonR(int* a,int n)
+//归并非递归(一次把temp拷贝回原数组)
+void MergeSortNonR1(int* a,int n)
 {
 	int* temp=(int*)malloc(sizeof(int)*n);
 	if(temp==NULL)
@@ -81,6 +81,24 @@ void MergeSortNonR(int* a,int n)
 			//分割左右区间:[begin,mid] [mid+1,end]
 			int begin1=i,end1=i+gap-1;
 			int begin2=i+gap,end2=i+2*gap-1;
+			
+			//修正 
+			if(end1>=n)		//end1越界 
+			{
+				end1=n-1;
+				begin2=n;
+				end2=n-1;
+			}
+			else if(begin2>=n)		//end1不越界,begin2越界 
+			{
+				begin2=n;
+				end2=n-1;
+			}
+			else	//end2越界 
+			{
+				end2=n-1;
+			}
+			
 			int j=i;
 			while(begin1<=end1 && begin2<=end2)
 			{
@@ -105,7 +123,69 @@ void MergeSortNonR(int* a,int n)
 		}	
 		
 		//拷贝
-		
+		memcpy(a,temp,sizeof(int)*n);
+		gap*=2;		
+	}
+	free(temp);	
+}
+
+//归并非递归(归并一次就把temp拷贝回原数组)
+void MergeSortNonR2(int* a,int n)
+{
+	int* temp=(int*)malloc(sizeof(int)*n);
+	if(temp==NULL)
+	{
+		perror("malloc fail\n");
+		return ;
+	}
+	
+	int gap=1;
+	while(gap<=n)
+	{
+		for(int i=0;i<n;i+=2*gap)
+		{
+			//分割左右区间:[begin,mid] [mid+1,end]
+			int begin1=i,end1=i+gap-1;
+			int begin2=i+gap,end2=i+2*gap-1;
+			
+			//修正 
+			if(end1>=n)		//end1越界 
+			{
+				break; 
+			}
+			else if(begin2>=n)		//end1不越界,begin2越界 
+			{
+				break;
+			}
+			else	//end2越界 
+			{
+				end2=n-1;
+			}
+			
+			int j=i;
+			while(begin1<=end1 && begin2<=end2)
+			{
+				if(a[begin1]<a[begin2])
+				{
+					temp[j++]=a[begin1++];
+				}
+				else
+				{
+					temp[j++]=a[begin2++];
+				}
+			}
+			//谁没结束谁往后走
+			while(begin1<=end1)
+			{
+				temp[j++]=a[begin1++];
+			}
+			while(begin2<=end2)
+			{
+				temp[j++]=a[begin2++];
+			}			
+			//拷贝
+			memcpy(a+i,temp+i,sizeof(int)*(end2-i+1));
+		}	
 		gap*=2;		
 	}
 	free(temp);	
@@ -113,10 +193,10 @@ void MergeSortNonR(int* a,int n)
 
 int main()
 {
-	int arr[]={40,7,12,34,50,91,75,65,25,25};
-//	MergeSort(arr,10);
-	MergeSortNonR(arr,10);
-	//quickSortNonR(arr,0,9);
-	printArray(arr,10); 
+	int arr[]={40,7,12,34,10,50,91,75,65,25,25};
+//	MergeSort(arr,10); 
+//	MergeSortNonR1(arr,11);
+	MergeSortNonR2(arr,11);
+	printArray(arr,11); 
 	return 0;
 }
