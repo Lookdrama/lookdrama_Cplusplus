@@ -1,0 +1,113 @@
+//typedef int semaphore;
+//semaphore mutex=1;		//表示父母和孩子之间拿取互斥
+//semaphore empty=4;		//表示空格子的个数
+//semaphore full=0;		//表示有水果的格子个数
+//
+//void parent()
+//{
+//	int fruit;
+//	while(true)
+//	{
+//		fruit=put_fruit();
+//		wait(&empty);
+//		wait(&mutex);
+//		insert_item(fruit);
+//		signal(&mutex);
+//		signal(&full);	
+//	}
+//}
+//
+//void child()
+//{
+//	int fruit;
+//	while(true)
+//	{
+//		wait(&full);
+//		wait(&mutex);
+//		fruit=remove_fruit();
+//		signal(&mutex);
+//		signal(&empty);
+//		consume_item(fruit) 
+//	}
+//}
+
+//typedef int semaphore;
+//semaphore mutex=1;				//相反方向通行猴子之间的互斥
+//semaphore scmutex=1;			//向南通行猴子计数器互斥
+//semaphore ncmutex=1;			//向北通行猴子计数器互斥
+//int sc=0;
+//int nc=0;
+//
+//void north()
+//{
+//	while(true)
+//	{
+//		wait(&ncmutex);
+//		nc+=1;
+//		if(nc==1)
+//			wait(&mutex);
+//		signal(&ncmutex);
+//		go_north();
+//		wait(&ncmutex);
+//		nc-=1;
+//		if(nc==0)
+//			signal(&mutex);
+//		signal(&ncmutex);
+//	}
+//}
+//
+//void sorth()
+//{
+//	while(true)
+//	{
+//		wait(&scmutex);
+//		sc+=1;
+//		if(sc==1)
+//			wait(&mutex);
+//		signal(&scmutex);
+//		go_north();
+//		wait(&scmutex);
+//		sc-=1;
+//		if(sc==0)
+//			signal(&mutex);
+//		signal(&scmutex);
+//	}
+//}
+
+typedef int semaphore;
+semaphore fullA=x;		//表示A邮箱邮件的个数
+semaphore emptyA=M-x;		//表示A邮箱还能放问题的个数
+semaphore fullB=y;		//表示B邮箱还能放问题的个数
+semaphore emptyB=N-y;		//表示B邮箱还能放问题的个数
+semaphore Amutex=1;		//表示A邮箱之间的互斥
+semaphore Bmutex=1;		//表示B邮箱之间的互斥
+
+A{
+	while(true)
+	{
+		wait(&fullA);
+		wait(&Amutex);
+		signal(&Amutex);
+		answer_A();
+		signal(&emptyA);
+		wait(&Bmutex);
+		signal(&fullB);
+		signal(&Bmutex);
+		wait(&emptyB);
+	}
+}
+
+B{
+	while(true)
+	{
+		wait(&fullB);
+		wait(&Bmutex);
+		siganl(&Bmutex);
+		answer_B();
+		signal(&emptyB);
+		wait(&Bmutex);
+		signal(&fullA);
+		signal(&Bmutex);
+		wait(&emptyA);
+	}
+}
