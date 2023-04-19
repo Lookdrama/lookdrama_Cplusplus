@@ -1,0 +1,45 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main()
+{
+	int a=0;
+	int b=a;
+	auto c=a;		//atuo根据右边的表达式自动推导c的类型
+	auto d=1+11.11;		
+	cout<<typeid(c).name()<<endl;
+	cout<<typeid(d).name()<<endl;
+
+
+
+	int x=10;
+	auto a1=x;
+	auto* b1=&x; 
+	auto& c1=x;
+
+
+	vector<int> v;
+	//类型很长
+	//vector<int>::iterator it=v.begin();
+	//等价的
+	auto it=v.begin();
+
+	
+	//适用于数组
+	//范围for 语法糖
+	//依次取数组中数据赋值给e
+	//自动迭代，自动判断结束
+	int arr[]={1,2,3,4,5};
+	for(auto e:arr)
+	{
+		cout<<e<<" ";
+	}
+	
+	//修改数据
+	for(auto& e:arr)
+	{
+		e*=2;
+	}
+	cout<<endl;
+}
