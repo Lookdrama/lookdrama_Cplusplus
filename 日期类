@@ -76,15 +76,15 @@ public:
 	Date& operator-=(int day)
 	{
 		_day -= day;
-		while (_day > GetMonthDay(_year, _month))
+		while (_day<=0)
 		{
-			_day -= GetMonthDay(_year, _month);
-			++_month;
-			if (_month == 13)
+			--_month;
+			if (_month == 0)
 			{
-				++_year;
-				_month = 1;
-			}				
+				--_year;
+				_month = 12;
+			}			
+			_day -= GetMonthDay(_year, _month);
 		}	
 		return *this;	
 	}
