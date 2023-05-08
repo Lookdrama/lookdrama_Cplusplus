@@ -2,23 +2,25 @@
 #include<cmath>
 using namespace std;
 
+int GetMonthDay(int year, int month)
+{
+	static int daysArr[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	//if (((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) && month == 2)
+	if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)))
+	{
+		return 29;
+	}
+	else
+	{
+		return daysArr[month];
+	}
+}
+
 class Date
 {
 public:
 // 获取某年某月的天数
-	int GetMonthDay(int year, int month)
-	{
-		static int daysArr[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-		//if (((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) && month == 2)
-		if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)))
-		{
-			return 29;
-		}
-		else
-		{
-			return daysArr[month];
-		}
-	}
+
 // 全缺省的构造函数
 	Date(int year = 1900, int month = 1, int day = 1)
 	{
@@ -49,6 +51,10 @@ public:
 // 日期+=天数
 	Date& operator+=(int day)
 	{
+		if(day<0)
+		{
+			return *this-= -day;
+		}
 		_day += day;
 		while (_day > GetMonthDay(_year, _month))
 		{
@@ -75,6 +81,10 @@ public:
 // 日期-=天数
 	Date& operator-=(int day)
 	{
+		if(day<0)
+		{
+			return *this+= -day;
+		}		
 		_day -= day;
 		while (_day<=0)
 		{
@@ -84,7 +94,7 @@ public:
 				--_year;
 				_month = 12;
 			}			
-			_day -= GetMonthDay(_year, _month);
+			_day += GetMonthDay(_year, _month);
 		}	
 		return *this;	
 	}
@@ -100,17 +110,7 @@ public:
 // 前置++
 	Date& operator++()
 	{
-		_day++;
-		while (_day > GetMonthDay(_year, _month))
-		{
-			_day -= GetMonthDay(_year, _month);
-			++_month;
-			if (_month == 13)
-			{
-				++_year;
-				_month = 1;
-			}				
-		}
+		*this+=1;
 		return *this;		
 	}
 
@@ -119,16 +119,7 @@ public:
 	{
 		Date temp(*this);
 		++_day;
-		while (_day > GetMonthDay(_year, _month))
-		{
-			_day -= GetMonthDay(_year, _month);
-			++_month;
-			if (_month == 13)
-			{
-				++_year;
-				_month = 1;
-			}				
-		}		
+		*this+=1;		
 		return temp;
 	}
 	
@@ -136,34 +127,14 @@ public:
 	Date operator--(int)
 	{
 		Date temp(*this);
-		--_day;
-		while (_day > GetMonthDay(_year, _month))
-		{
-			_day -= GetMonthDay(_year, _month);
-			++_month;
-			if (_month == 13)
-			{
-				++_year;
-				_month = 1;
-			}				
-		}		
+		*this-=1;	
 		return temp;	
 	}
 
 // 前置--
 	Date& operator--()
 	{
-		_day++;
-		while (_day > GetMonthDay(_year, _month))
-		{
-			_day -= GetMonthDay(_year, _month);
-			++_month;
-			if (_month == 13)
-			{
-				++_year;
-				_month = 1;
-			}				
-		}
+		*this-=1;
 		return *this;		
 	}
 
@@ -237,8 +208,25 @@ public:
 		}
 		return day*flag;
 	}
+	
+	
+	friend istream& operator >>(istream& in,Date& d1);
+	
 private:
+	friend ostream& operator <<(ostream& os,Date& d1);
 	int _year;
 	int _month;
 	int _day;
 };
+
+ostream& operator <<(ostream& os,Date& d1)
+{
+	os<<d1._year<<"-"<<d1._month<<"-"<<d1._day;
+	return os;
+}
+
+istream& operator >>(istream& in,Date& d1)
+{
+	in>>d1._year>>d1._month>>d1._day;
+	return in;
+}
