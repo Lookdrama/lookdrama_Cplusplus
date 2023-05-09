@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+int GetMonthDay(int year, int month) {
+    static int daysArr[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    //if (((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) && month == 2)
+    if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))) {
+        return 29;
+    } else {
+        return daysArr[month];
+    }
+}
+
+int main() {
+    int* a = new int[3];
+    for (int i = 0; i < 3; i++) {
+        cin >> a[i];
+    }
+    int count = 0;
+    for(int i=1;i<a[1];i++)
+    {
+        count+=GetMonthDay(a[0],i);
+    }
+    count+=a[2];
+    cout<<count; 
+	return 0;
+}
