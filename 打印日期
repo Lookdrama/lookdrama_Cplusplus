@@ -1,0 +1,32 @@
+#include <iostream>
+using namespace std;
+
+int GetMonthDay(int year, int month) {
+    static int daysArr[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    //if (((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) && month == 2)
+    if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))) {
+        return 29;
+    } else {
+        return daysArr[month];
+    }
+}
+
+int main() {
+    int y, d;
+    int m = 0;
+    while (cin >> y >> d) { // 注意 while 处理多个 case
+        for (m = 1; m <= 12; m++) {
+            if (d <= GetMonthDay(y,m))
+            {
+                printf("%04d-%02d-%02d\n", y, m, d);
+                break;
+            }
+            else
+            {
+                d-=GetMonthDay(y,m);
+            }
+        }
+
+    }
+    return 0;
+}
