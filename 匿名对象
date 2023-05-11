@@ -1,0 +1,33 @@
+#include<iostream>
+using namespace std;
+
+class A
+{
+public:
+	A(int a=0)
+	{
+		_a=a;
+		cout<<"A()"<<endl;
+	}
+	void Show() const
+	{
+		cout<<"C++"<<endl;
+	}
+	~A()
+	{
+		cout<<"~A()"<<endl;
+	}
+private:
+	int _a;
+};
+
+int main()
+{
+	A a(1);		//有名对象---生命周期在当前函数局部域 
+	A(2);	//匿名对象---生命周期在当前行		
+	a.Show();
+	A().Show();
+	const A& ra=A(1);	//const引用延长匿名对象的生命周期，生命周期在当前函数局部域 
+	ra.Show();
+	return 0;
+}
