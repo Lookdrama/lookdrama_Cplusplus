@@ -1,0 +1,38 @@
+#include<iostream>
+#include<string>
+using namespace std;
+
+/*
+	cpp string:管理字符数组，增删查改+算法 
+*/
+
+int main()
+{
+	//string初始化 
+	string s1;
+	string s2("ljx");
+	string s3("梁建鑫");
+	string s4(10,'-');
+	string s5(s2);
+	string s6(s2,1,2);
+
+	//增
+	s1.append("Hello");	
+	s1.push_back(' ');
+	s1 += "World";
+	cout<<s1<<endl;
+	
+	//要求x转成string对象
+	size_t x=0;
+	cin>>x;
+	string xstr;
+	while(x)
+	{
+		size_t val=x%10;
+		xstr+=('0'+val);
+		x/=10;
+	} 
+	
+	cout<<xstr<<endl;
+	return 0;
+}
