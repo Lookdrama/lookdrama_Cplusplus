@@ -1,10 +1,23 @@
 #include<iostream>
 #include<string>
+#include<algorithm>
 using namespace std;
 
 /*
 	cpp string:管理字符数组，增删查改+算法 
 */
+
+void Func(const string& s)
+{
+	string::const_iterator it=s.begin();
+	while(it!=s.end())
+	{
+//		(*it)+=2;	//相当于const int* p(只读不写);	
+		cout<<*it<<" ";
+		++it;
+	}	
+	cout<<endl;
+} 
 
 int main()
 {
@@ -15,24 +28,64 @@ int main()
 	string s4(10,'-');
 	string s5(s2);
 	string s6(s2,1,2);
-
+	
 	//增
 	s1.append("Hello");	
 	s1.push_back(' ');
 	s1 += "World";
 	cout<<s1<<endl;
 	
-	//要求x转成string对象
-	size_t x=0;
-	cin>>x;
-	string xstr;
-	while(x)
-	{
-		size_t val=x%10;
-		xstr+=('0'+val);
-		x/=10;
-	} 
+//	//要求x转成string对象
+//	size_t x=0;
+//	cin>>x;
+//	string xstr;
+//	while(x)
+//	{
+//		size_t val=x%10;
+//		xstr+=('0'+val);
+//		x/=10;
+//	} 
+//	cout<<xstr<<endl;
 	
-	cout<<xstr<<endl;
+/*
+	迭代器(STL中常用;iterator是像指针一样的类型)
+	总结：iterator提供一种统一的方式访问和修改容器的数据 
+		//iterator和算法进行配合
+		  算法就可以通过迭代器，去处理容器中的数据                  
+*/
+	string::iterator it=s1.begin();
+	while(it!=s1.end())
+	{
+		cout<<*it<<" ";
+		++it;
+	}	
+	cout<<endl;
+	
+	//范围for
+	for(auto ch:s1)
+	{
+		cout<<ch<<" ";
+	} 
+	cout<<endl;
+	
+ 	//反向迭代器
+//	string::reverse_iterator rit=s1.rbegin();
+//	while(rit!=s1.rend())
+//	{
+//		cout<<*rit<<" ";
+//		++rit;	
+//	}
+//	cout<<endl; 
+	auto rit=s1.rbegin();	//可替代上面式子 
+	while(rit!=s1.rend())
+	{
+		(*rit)+=3;
+		cout<<*rit<<" ";
+		++rit;	
+	}
+	cout<<endl; 
+	
+	cout<<s1.size()<<endl;		//元素个数 
+	cout<<s1.length()<<endl;	//元素长度 
 	return 0;
 }
