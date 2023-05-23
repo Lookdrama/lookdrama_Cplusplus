@@ -87,5 +87,21 @@ int main()
 	
 	cout<<s1.size()<<endl;		//元素个数 
 	cout<<s1.length()<<endl;	//元素长度 
+	cout<<s1.capacity()<<endl;	//字符串的容量
+	size_t old=s1.capacity();
+	for(size_t i=0;i<100;i++)
+	{
+		s1+='x';
+		if(old!=s1.capacity())
+		{
+			cout<<"扩容:"<<s1.capacity()<<endl;
+			old=s1.capacity();
+		}
+	} 
+	
+	cout<<s1.capacity()<<endl;
+	s1.clear();		//清除数据,size=0,caoacity不变 
+	cout<<s1.size()<<endl;	
+	cout<<s1.capacity()<<endl;
 	return 0;
 }
