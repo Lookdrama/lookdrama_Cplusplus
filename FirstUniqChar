@@ -1,0 +1,19 @@
+/*
+思路：
+* 1. 分别对字符串进行正序查询和反序查询
+* 2. 如果所查询的字符下标相等，说明此字符只出现了一
+*/
+class Solution {
+public:
+  int firstUniqChar(string s) 
+  {
+    for(int i=0; i<s.size(); ++i)
+    {
+      int index = s.find(s[i]);
+      int reverse_index = s.rfind(s[i]);  
+      if(index == reverse_index)
+        return i;
+    }
+    return -1;
+  }
+};
