@@ -1,0 +1,43 @@
+#include<iostream>
+#include <algorithm>
+#include<string>
+using namespace std;
+
+class Solution{
+public:
+    string addStrings(string num1,string num2)
+    {
+        int end1=num1.size()-1;
+        int end2=num2.size()-1;
+        int car=0;  //进位
+        string s;
+        while(end1>=0 || end2>=0)
+        {
+            int val1=end1>=0?num1[end1]-'0':0;
+            int val2=end2>=0?num2[end2]-'0':0;
+            
+            int ret=val1+val2+car;
+            car=ret/10;
+            ret=ret%10;
+            s+=ret+'0';
+            end1--;
+            end2--;
+       }
+        
+        if(car==1)
+        {
+            s+='1';
+        }
+
+        reverse(s.begin(),s.end());
+        return s;
+    }
+};
+
+int main()
+{ 
+    Solution s1;
+    cout<<s1.addStrings("456","77")<<endl;
+	return 0;
+    
+}
