@@ -1,5 +1,6 @@
 #pragma once
 #include<algorithm>
+#include<assert.h>
 #include<iostream>
 using namespace std;
 
@@ -22,10 +23,11 @@ namespace bit
 		}
 	};
 
-	template<class T>
+	template<class T,class Ref, class Ptr>
 	struct _list_iterator
 	{
 		typedef list_node<T> Node;
+		typedef _list_iterator<T, Ref, Ptr> self;
 		Node* _node;
 
 		_list_iterator(Node* node)
@@ -34,30 +36,48 @@ namespace bit
 			;
 		}
 
-		T& operator* ()
+		Ref operator* ()
 		{
 			return _node->_val;
 		}
 
-		_list_iterator<T>& operator++ ()
+		Ptr operator-> ()
+		{
+			return &_node->_val;
+		}
+
+		self& operator++ ()		//前置++
 		{
 			_node = _node->_next;
 			return *this;
 		}
 
-		_list_iterator<T>& operator++ (int)
+		self& operator++ (int)	//后置++
 		{
-			_list_iterator<T> temp(*this);
+			self temp(*this);
 			_node = _node->_next;
 			return temp;
 		}
 
-		bool operator!= (const _list_iterator<T>& it)
+		self& operator-- ()		//前置--
+		{
+			_node = _node->_prev;
+			return *this;
+		}
+
+		self& operator-- (int)	//后置--
+		{
+			self temp(*this);
+			_node = _node->_prev;
+			return temp;
+		}
+
+		bool operator!= (const self& it) const
 		{
 			return _node != it._node;
 		}
 
-		bool operator== (const _list_iterator<T>& it)
+		bool operator== (const self& it) const 
 		{
 			return _node == it._node;
 		}
@@ -68,7 +88,11 @@ namespace bit
 	class list {
 		typedef list_node<T> Node;
 	public:
-		typedef _list_iterator<T> iterator;
+		typedef _list_iterator<T, T&, T*> iterator;
+		typedef _list_iterator<T, const T&, const T*> const_iterator;
+
+		//下面这样设计的const迭代器是不行的，因为const迭代器期望指向的内容不能修改，而本身是可以修改的
+		//typedef const _list_iterator<T> const_iterator;
 
 		iterator begin()
 		{
@@ -88,25 +112,128 @@ namespace bit
 			_head = new Node;
 			_head->_prev = _head;
 			_head->_next = _head;
+			sz = 0;
+		}
+
+		list(const list<T>& lt)
+		{
+			_head = new Node;
+			_head->_prev = _head;
+			_head->_next = _head;
+			sz = 0;
+
+			for (auto& e : lt)
+			{
+				push_back(e);
+			}
+		}
+
+		void swap(list(T)& lt)
+		{
+			std::swap(_head, lt._head);
+			std::swap(_size, lt._size);
+		}
+
+		list<T>& operator= (list<T> lt)
+		{
+			swap(lt);
+			return *this;
 		}
 
 		~list()
 		{
-			//......
+			clear();
+			delete _head;
+			_head = nullptr;
+		}
+
+		void clear()
+		{
+			iterator it = begin();
+			while (it != end())
+			{
+				it = erase(it);
+			}
+			sz = 0;
 		}
 
 		void push_back(const T& x)
 		{
-			Node* tail = _head->_prev;
+			//Node* tail = _head->_prev;
+			//Node* newnode = new Node(x);
+			//tail->_next = newnode;
+			//newnode->_prev = tail;
+			//newnode->_next = _head;
+			//_head->_prev = newnode;
+			
+			insert(end(), x);
+		}
+		
+		void push_front(const T& x)
+		{
+			insert(begin(), x);
+		}
+
+		void pop_back()
+		{
+			erase(--end());
+		}
+
+		void pop_front()
+		{
+			erase(begin());
+		}
+
+		//在pos位置前插入x，返回当前节点
+		iterator insert(iterator pos, const T& x)
+		{
+			Node* cur = pos._node;
+			Node* prev = cur->_prev;
 			Node* newnode = new Node(x);
-			tail->_next = newnode;
-			newnode->_prev = tail;
-			newnode->_next = _head;
-			_head->_prev = newnode;
+
+			prev->_next = newnode;
+			newnode->_next = cur;
+
+			newnode->_prev = prev;
+			cur->_prev = newnode;
+			++sz;
+
+			return newnode;
+		}
+
+		//返回下一个节点
+		iterator erase(iterator pos)
+		{
+			assert(pos != end());
+			Node* cur = pos._node;
+			Node* prev = cur->_prev;
+			Node* next = cur->_next;
+
+			prev->_next = next;
+			next->_prev = prev;
+			--sz;
+
+			delete cur;
+
+			return next;
+		}
+
+		size_t size()
+		{
+			//size_t sz = 0;
+			//iterator it = begin();
+			//while (it != end())
+			//{
+			//	it++;
+			//	sz++;
+			//}
+
+			return sz;
 		}
 
 	private:
 		Node* _head;
+		size_t sz;
 	};
 
 	void test_list1()
@@ -124,6 +251,31 @@ namespace bit
 		}
 		cout << endl;
 
+		for (auto e : l1)
+		{
+			cout << e << " ";
+		}
+		cout << endl;
+	}
+
+	void test_list2()
+	{
+		list<int> l1;
+		l1.push_back(1);
+		l1.push_back(2);
+		l1.push_back(3);
+		l1.push_front(3);
+		l1.push_front(2);
+		l1.push_front(1);
+		l1.push_front(0);
+		for (auto e : l1)
+		{
+			cout << e << " ";
+		}
+		cout << endl;
+
+		l1.pop_back();
+		l1.pop_front();
 		for (auto e : l1)
 		{
 			cout << e << " ";
